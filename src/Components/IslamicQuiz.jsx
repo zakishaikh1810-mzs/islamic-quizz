@@ -572,24 +572,56 @@ export default function IslamicQuiz() {
       return;
     }
 
-    const fullName = getFullName();
+  if (!/^[A-Za-z ]{3,}$/.test(firstName.trim())) {
+  setInfoModal({
+    title: "Invalid First Name",
+    text: "Please enter a valid first name with at least 3 letters.",
+  });
+  return;
+}
 
-    const alreadyPlayed = await checkDifficultyAlreadyPlayed(
-      fullName,
-      selectedDifficulty
-    );
+if (!/^[A-Za-z ]{3,}$/.test(lastName.trim())) {
+  setInfoModal({
+    title: "Invalid Last Name",
+    text: "Please enter a valid last name with at least 3 letters.",
+  });
+  return;
+}
 
-    if (alreadyPlayed) {
-      setInfoModal({
-        title: "Already Played",
-        text: `${fullName} has already played ${selectedDifficulty}. You can still play the other difficulty levels.`,
-      });
+if (!/^[A-Za-z ]{3,}$/.test(firstName.trim())) {
+  setInfoModal({
+    title: "Invalid First Name",
+    text: "Please enter a valid first name with at least 3 letters.",
+  });
+  return;
+}
 
-      return;
-    }
+if (!/^[A-Za-z ]{3,}$/.test(lastName.trim())) {
+  setInfoModal({
+    title: "Invalid Last Name",
+    text: "Please enter a valid last name with at least 3 letters.",
+  });
+  return;
+}
 
-    setShowCheatModal(true);
-  };
+const fullName = getFullName();
+
+const alreadyPlayed = await checkDifficultyAlreadyPlayed(
+  fullName,
+  selectedDifficulty
+);
+
+if (alreadyPlayed) {
+  setInfoModal({
+    title: "Already Played",
+    text: `${fullName} has already played ${selectedDifficulty}. You can still play the other difficulty levels.`,
+  });
+
+  return;
+}
+
+setShowCheatModal(true);
+};
 
   // ==================== BEGIN QUIZ ====================
 
@@ -791,7 +823,7 @@ export default function IslamicQuiz() {
             </h1>
 
             <p className="text-center text-gray-600 text-sm mb-6">
-              5 Questions • 30 seconds each
+               Question • 30 seconds each
             </p>
 
             {/* FIRST NAME */}
