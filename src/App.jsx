@@ -34,7 +34,7 @@
 
 // export default App;
 
-import IslamicQuiz from "./components/IslamicQuiz";
+import IslamicQuiz from "./Components/IslamicQuiz";
 
 function App() {
   return <IslamicQuiz />;
