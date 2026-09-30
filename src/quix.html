@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Islamic Knowledge Quiz | بسم الله</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-database-compat.js"></script>
+  <style>
+    :root {
+      --primary: #0d6e4f;
+      --primary-light: #1a8a64;
+      --gold: #d4af37;
+      --cream: #f8f5f0;
+      --dark: #1a2e28;
+      --success: #2e7d32;
+      --error: #c62828;
+      --shadow: 0 10px 40px rgba(13, 110, 79, 0.15);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #0a4d3c 0%, #0d6e4f 40%, #1a5c45 100%);
+      min-height: 100vh;
+      color: var(--dark);
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d4af37' fill-opacity='0.06'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 20px 16px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .screen { display: none; animation: fadeIn 0.4s ease; }
+    .screen.active { display: block; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.03); }
+    }
+
+    .card {
+      background: var(--cream);
+      border-radius: 24px;
+      padding: 30px 26px;
+      box-shadow: var(--shadow);
+      border: 2px solid rgba(212, 175, 55, 0.25);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--gold), var(--primary), var(--gold));
+    }
+
+    .bismillah {
+      font-family: 'Amiri', serif;
+      font-size: 1.5rem;
+      color: var(--primary);
+      text-align: center;
+      margin-bottom: 6px;
+    }
+
+    h1 {
+      font-family: 'Amiri', serif;
+      font-size: 1.75rem;
+      color: var(--primary);
+      text-align: center;
+      margin-bottom: 4px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #5a6b63;
+      font-size: 0.92rem;
+      margin-bottom: 22px;
+    }
+
+    .input-group { margin-bottom: 18px; }
+
+    label {
+      display: block;
+      font-weight: 500;
+      margin-bottom: 7px;
+      font-size: 0.95rem;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 13px 16px;
+      border: 2px solid #d4e0d9;
+      border-radius: 13px;
+      font-size: 1.02rem;
+      font-family: inherit;
+      background: white;
+      outline: none;
+      transition: 0.2s;
+    }
+
+    input[type="text"]:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(13,110,79,0.12);
+    }
+
+    .difficulty-title {
+      text-align: center;
+      font-weight: 600;
+      margin: 6px 0 12px;
+      font-size: 0.98rem;
+    }
+
+    .diff-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .diff-btn {
+      padding: 14px 16px;
+      border-radius: 13px;
+      border: 2px solid #e0e0e0;
+      font-size: 1.02rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      background: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: 0.2s;
+    }
+
+    .diff-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
+    .diff-btn.easy.selected { background: #e8f5e9; border-color: #2e7d32; color: #2e7d32; }
+    .diff-btn.medium.selected { background: #fffde7; border-color: #f9a825; color: #f57f17; }
+    .diff-btn.hard.selected { background: #ffebee; border-color: #c62828; color: #c62828; }
+
+    .diff-badge {
+      font-size: 0.72rem;
+      padding: 3px 9px;
+      border-radius: 50px;
+      background: #f0f0f0;
+      color: #555;
+      font-weight: 600;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 15px;
+      border: none;
+      border-radius: 13px;
+      font-size: 1.05rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      color: white;
+      box-shadow: 0 5px 18px rgba(13,110,79,0.28);
+    }
+
+    .btn-primary:hover { transform: translateY(-1px); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .btn-outline {
+      background: transparent;
+      border: 2px solid var(--primary);
+      color: var(--primary);
+    }
+
+    .btn-outline:hover { background: var(--primary); color: white; }
+
+    .quiz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .question-counter { font-weight: 600; color: var(--primary); font-size: 0.92rem; }
+
+    .diff-tag {
+      font-size: 0.72rem;
+      padding: 2px 9px;
+      border-radius: 50px;
+      font-weight: 600;
+      margin-left: 7px;
+    }
+    .diff-tag.easy { background: #e8f5e9; color: #2e7d32; }
+    .diff-tag.medium { background: #fffde7; color: #f57f17; }
+    .diff-tag.hard { background: #ffebee; color: #c62828; }
+
+    .timer-box {
+      background: var(--primary);
+      color: white;
+      padding: 5px 14px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 1.05rem;
+      min-width: 64px;
+      text-align: center;
+    }
+    .timer-box.warning { background: #e65100; animation: pulse 0.6s infinite; }
+    .timer-box.danger { background: var(--error); animation: pulse 0.4s infinite; }
+
+    .progress-bar {
+      height: 5px;
+      background: #d4e0d9;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold), var(--primary));
+      transition: width 0.35s;
+    }
+
+    .question-text {
+      font-size: 1.18rem;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 20px;
+      line-height: 1.45;
+    }
+
+    .options { display: flex; flex-direction: column; gap: 10px; }
+
+    .option {
+      padding: 14px 16px;
+      background: white;
+      border: 2px solid #d4e0d9;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 0.98rem;
+      transition: 0.2s;
+      text-align: left;
+    }
+    .option:hover:not(.disabled) { border-color: var(--primary); background: #f0f7f4; }
+    .option.selected { border-color: var(--primary); background: #e8f5f0; }
+    .option.correct { border-color: var(--success); background: #e8f5e9; color: var(--success); font-weight: 600; }
+    .option.wrong { border-color: var(--error); background: #ffebee; color: var(--error); }
+    .option.disabled { cursor: not-allowed; opacity: 0.88; }
+
+    .feedback {
+      margin-top: 16px;
+      padding: 12px;
+      border-radius: 11px;
+      text-align: center;
+      font-weight: 600;
+      font-size: 1rem;
+      display: none;
+    }
+    .feedback.show { display: block; }
+    .feedback.correct { background: #e8f5e9; color: var(--success); }
+    .feedback.wrong { background: #ffebee; color: var(--error); }
+
+    .score-circle {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 18px;
+      color: white;
+      box-shadow: 0 8px 25px rgba(13,110,79,0.28);
+    }
+    .score-circle .number { font-size: 2.6rem; font-weight: 700; line-height: 1; }
+    .score-circle .label { font-size: 0.85rem; opacity: 0.9; }
+
+    .result-message { text-align: center; font-size: 1.12rem; font-weight: 500; margin-bottom: 4px; }
+    .result-sub { text-align: center; color: #5a6b63; font-size: 0.92rem; margin-bottom: 16px; }
+
+    .wrong-review {
+      margin: 18px 0 10px;
+      text-align: left;
+    }
+    .wrong-review h3 {
+      font-size: 1rem;
+      color: var(--error);
+      margin-bottom: 12px;
+      text-align: center;
+    }
+    .wrong-item {
+      background: white;
+      border: 1px solid #ffcdd2;
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 10px;
+      font-size: 0.9rem;
+    }
+    .wrong-item .q { font-weight: 600; margin-bottom: 6px; color: var(--dark); }
+    .wrong-item .your { color: var(--error); margin-bottom: 3px; }
+    .wrong-item .correct-ans { color: var(--success); font-weight: 500; }
+
+    .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #e8f5e9;
+      color: var(--success);
+      padding: 4px 11px;
+      border-radius: 50px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      margin-bottom: 14px;
+    }
+    .live-dot {
+      width: 7px; height: 7px;
+      background: var(--success);
+      border-radius: 50%;
+      animation: pulse 1.2s infinite;
+    }
+
+    .leaderboard-list { list-style: none; margin: 12px 0; }
+
+    .leaderboard-item {
+      display: flex;
+      align-items: center;
+      padding: 12px 13px;
+      background: white;
+      border-radius: 11px;
+      margin-bottom: 8px;
+      border: 1px solid #e0ebe5;
+    }
+    .leaderboard-item.top1 { background: linear-gradient(135deg, #fff8e1, #ffecb3); border-color: var(--gold); }
+    .leaderboard-item.top2 { background: #f5f5f5; }
+    .leaderboard-item.top3 { background: #fff3e0; }
+
+    .rank {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.82rem;
+      margin-right: 11px;
+      flex-shrink: 0;
+    }
+    .top1 .rank { background: var(--gold); color: #1a2e28; }
+    .top2 .rank { background: #9e9e9e; }
+    .top3 .rank { background: #cd7f32; }
+
+    .player-info { flex: 1; min-width: 0; }
+    .player-name { font-weight: 500; font-size: 0.98rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .player-diff { font-size: 0.72rem; color: #777; margin-top: 1px; }
+    .player-score { font-weight: 700; color: var(--primary); font-size: 1.02rem; }
+
+    .footer {
+      text-align: center;
+      margin-top: 22px;
+      color: rgba(255,255,255,0.75);
+      font-size: 0.82rem;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(13, 50, 40, 0.82);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      padding: 18px;
+    }
+    .modal-overlay.show { display: flex !important; }
+
+    .modal {
+      background: var(--cream);
+      border-radius: 18px;
+      padding: 26px 22px;
+      max-width: 370px;
+      width: 100%;
+      text-align: center;
+      border: 2px solid rgba(212,175,55,0.3);
+      box-shadow: 0 18px 50px rgba(0,0,0,0.3);
+      animation: fadeIn 0.3s;
+    }
+    .modal h3 {
+      font-family: 'Amiri', serif;
+      color: var(--primary);
+      font-size: 1.4rem;
+      margin-bottom: 10px;
+    }
+
+    @media (max-width: 480px) {
+      .card { padding: 24px 18px; }
+      .question-text { font-size: 1.1rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- START SCREEN -->
+    <div id="start-screen" class="screen active">
+      <div class="card">
+        <div class="bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+        <h1>Islamic Knowledge Quiz</h1>
+        <p class="subtitle">5 Questions • 30 seconds each</p>
+
+        <div class="input-group">
+          <label for="playerName">Enter your name</label>
+          <input type="text" id="playerName" placeholder="Your beautiful name..." maxlength="25" autocomplete="off" />
+        </div>
+
+        <div class="difficulty-title">Select Difficulty</div>
+        <div class="diff-buttons">
+          <button class="diff-btn easy" data-diff="easy" onclick="selectDifficulty('easy')">
+            <span>🌱 Easy</span>
+            <span class="diff-badge">Basic</span>
+          </button>
+          <button class="diff-btn medium" data-diff="medium" onclick="selectDifficulty('medium')">
+            <span>⭐ Medium</span>
+            <span class="diff-badge">Standard</span>
+          </button>
+          <button class="diff-btn hard" data-diff="hard" onclick="selectDifficulty('hard')">
+            <span>🔥 Hard</span>
+            <span class="diff-badge">Advanced</span>
+          </button>
+        </div>
+
+        <button class="btn btn-primary" id="startBtn" onclick="startQuiz()" disabled>
+          Begin with Bismillah →
+        </button>
+
+        <div style="margin-top:16px; text-align:center;">
+          <button class="btn btn-outline" style="width:auto; padding:9px 16px; font-size:0.88rem;" onclick="showLeaderboard()">
+            View Live Leaderboard
+          </button>
+        </div>
+      </div>
+      <div class="footer">
+        May Allah increase us in beneficial knowledge<br>
+        <span style="font-size:0.78rem; opacity:0.85;">Made by Zakii Shaikh</span>
+      </div>
+    </div>
+
+    <!-- QUIZ SCREEN -->
+    <div id="quiz-screen" class="screen">
+      <div class="card">
+        <div class="quiz-header">
+          <div>
+            <span class="question-counter" id="questionCounter">Question 1 of 5</span>
+            <span class="diff-tag" id="diffTag">Easy</span>
+          </div>
+          <div class="timer-box" id="timer">30</div>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill" style="width:20%"></div>
+        </div>
+        <div class="question-text" id="questionText"></div>
+        <div class="options" id="optionsContainer"></div>
+        <div class="feedback" id="feedback"></div>
+      </div>
+    </div>
+
+    <!-- RESULT SCREEN -->
+    <div id="result-screen" class="screen">
+      <div class="card">
+        <div class="bismillah" style="font-size:1.25rem;">الْحَمْدُ لِلَّهِ</div>
+        <div class="score-circle">
+          <div class="number" id="finalScore">0</div>
+          <div class="label">out of 5</div>
+        </div>
+        <div class="result-message" id="resultMessage">MashaAllah!</div>
+        <div class="result-sub" id="resultSub">Your score has been saved.</div>
+
+        <div class="wrong-review" id="wrongReview" style="display:none;">
+          <h3>Questions you got wrong</h3>
+          <div id="wrongList"></div>
+        </div>
+
+        <p style="text-align:center; margin:16px 0 4px; font-size:1.05rem; color:var(--primary); font-weight:600;">
+          JazakAllahu Khairan for playing!
+        </p>
+        <p style="text-align:center; font-size:0.88rem; color:#555; margin-bottom:6px;">
+          Your name and score are now on the Live Leaderboard
+        </p>
+        <p style="text-align:center; font-size:0.84rem; color:#666; margin-bottom:18px;">
+          Made with ❤️ by <strong>Zakii Shaikh</strong>
+        </p>
+
+        <button class="btn btn-primary" onclick="showLeaderboard()" style="margin-bottom:10px;">
+          View Live Leaderboard
+        </button>
+        <button class="btn btn-outline" onclick="restartQuiz()">
+          Play Again
+        </button>
+      </div>
+    </div>
+
+    <!-- LEADERBOARD (Public only) -->
+    <div id="leaderboard-screen" class="screen">
+      <div class="card">
+        <div class="bismillah" style="font-size:1.2rem;">لوحة المتصدرين</div>
+        <h1 style="font-size:1.5rem; margin-bottom:4px;">Live Leaderboard</h1>
+        
+        <div class="live-badge">
+          <span class="live-dot"></span> Live Updates
+        </div>
+
+        <ul class="leaderboard-list" id="leaderboardList"></ul>
+        <p id="emptyLeaderboard" style="text-align:center; color:#888; display:none; padding:18px 0;">
+          No scores yet. Be the first!
+        </p>
+
+        <button class="btn btn-outline" style="margin-top:16px;" onclick="goHome()">
+          ← Back to Home
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Don't Cheat Modal -->
+  <div class="modal-overlay" id="cheatModal">
+    <div class="modal">
+      <h3>⚠️ Do Not Cheat</h3>
+      <p style="color:#5a6b63; margin-bottom:8px; line-height:1.5; font-size:0.95rem;">
+        This quiz is for seeking knowledge, not for showing off.<br><br>
+        <strong>“Allah is with those who are honest.”</strong><br>
+        <span style="font-size:0.85rem; color:#777;">(Based on Islamic teachings about honesty & sincerity)</span>
+      </p>
+      <p style="color:#c62828; font-weight:600; margin:12px 0 18px; font-size:0.95rem;">
+        Play fairly. Allah is watching.
+      </p>
+      <button class="btn btn-primary" onclick="closeCheatModal()">
+        I Understand – Start Quiz
+      </button>
+    </div>
+  </div>
+
+  <!-- Score Popup -->
+  <div class="modal-overlay" id="scoreModal">
+    <div class="modal">
+      <div style="font-family:'Amiri',serif; font-size:1.3rem; color:var(--primary); margin-bottom:6px;">الْحَمْدُ لِلَّهِ</div>
+      <h3 id="scoreModalTitle">Your Score</h3>
+      
+      <div style="width:105px; height:105px; border-radius:50%; background:linear-gradient(135deg,var(--primary),var(--primary-light)); display:flex; flex-direction:column; align-items:center; justify-content:center; margin:12px auto 14px; color:white;">
+        <div style="font-size:2.3rem; font-weight:700; line-height:1;" id="scoreModalNumber">0</div>
+        <div style="font-size:0.8rem; opacity:0.9;">out of 5</div>
+      </div>
+
+      <p id="scoreModalMessage" style="font-weight:600; margin-bottom:6px;"></p>
+      <p style="color:#5a6b63; margin-bottom:12px; font-size:0.92rem;">JazakAllahu Khairan for playing!</p>
+      <p style="font-size:0.85rem; color:#666; margin-bottom:18px;">
+        Made with ❤️ by <strong style="color:var(--primary);">Zakii Shaikh</strong>
+      </p>
+
+      <button class="btn btn-primary" onclick="closeScoreModal()" style="margin-bottom:9px;">
+        See Results & Wrong Answers
+      </button>
+      <button class="btn btn-outline" onclick="closeScoreModalAndRestart()">
+        Play Again
+      </button>
+    </div>
+  </div>
+
+  <!-- Simple info modal -->
+  <div class="modal-overlay" id="modal">
+    <div class="modal">
+      <h3 id="modalTitle">Info</h3>
+      <p id="modalText" style="color:#5a6b63; margin-bottom:16px;"></p>
+      <button class="btn btn-primary" onclick="closeModal()">OK</button>
+    </div>
+  </div>
+
+  <script>
+    // ==================== FIREBASE CONFIG ====================
+    // Replace with your real Firebase config to make leaderboard LIVE for everyone
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT.firebaseapp.com",
+      databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
+      projectId: "YOUR_PROJECT",
+      storageBucket: "YOUR_PROJECT.appspot.com",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+
+    let db = null;
+    let useFirebase = false;
+
+    try {
+      if (firebaseConfig.apiKey !== "YOUR_API_KEY") {
+        firebase.initializeApp(firebaseConfig);
+        db = firebase.database();
+        useFirebase = true;
+        console.log("Firebase connected – Live leaderboard active");
+      }
+    } catch (e) {
+      console.warn("Using local storage mode");
+    }
+
+    // ==================== HARDER QUESTIONS ====================
+    const questionBanks = {
+      easy: [
+        {
+          q: "How many pillars of Islam are there?",
+          options: ["3", "4", "5", "7"],
+          correct: 2
+        },
+        {
+          q: "What is the name of the holy book revealed to Prophet Muhammad ﷺ?",
+          options: ["Injil", "Tawrat", "Zabur", "Quran"],
+          correct: 3
+        },
+        {
+          q: "In which month is fasting obligatory for Muslims?",
+          options: ["Shawwal", "Ramadan", "Rajab", "Muharram"],
+          correct: 1
+        },
+        {
+          q: "Who is the final messenger of Allah?",
+          options: ["Prophet Isa (AS)", "Prophet Musa (AS)", "Prophet Ibrahim (AS)", "Prophet Muhammad ﷺ"],
+          correct: 3
+        },
+        {
+          q: "What do Muslims face towards when they pray?",
+          options: ["The rising sun", "The Kaaba in Makkah", "Jerusalem", "Madinah"],
+          correct: 1
+        }
+      ],
+      medium: [
+        {
+          q: "Who was the first person to accept Islam?",
+          options: ["Abu Bakr As-Siddiq (RA)", "Ali ibn Abi Talib (RA)", "Khadijah bint Khuwaylid (RA)", "Zayd ibn Harithah (RA)"],
+          correct: 2
+        },
+        {
+          q: "In which city was the Prophet Muhammad ﷺ born?",
+          options: ["Madinah", "Ta'if", "Makkah", "Yathrib"],
+          correct: 2
+        },
+        {
+          q: "What is the name of the night journey of the Prophet ﷺ from Makkah to Jerusalem and then to the heavens?",
+          options: ["Hijrah", "Isra and Mi'raj", "Ghazwah", "Fath Makkah"],
+          correct: 1
+        },
+        {
+          q: "Which Surah is known as the 'Heart of the Quran'?",
+          options: ["Surah Al-Fatihah", "Surah Al-Mulk", "Surah Yaseen", "Surah Ar-Rahman"],
+          correct: 2
+        },
+        {
+          q: "How many times is the word 'Allah' mentioned in Surah Al-Ikhlas?",
+          options: ["1 time", "2 times", "3 times", "4 times"],
+          correct: 1
+        }
+      ],
+      hard: [
+        {
+          q: "In which year of the Hijrah was the Treaty of Hudaybiyyah signed?",
+          options: ["5 AH", "6 AH", "7 AH", "8 AH"],
+          correct: 1
+        },
+        {
+          q: "Who was the only woman whose name is mentioned in the Quran?",
+          options: ["Khadijah (RA)", "Aisha (RA)", "Maryam (AS)", "Fatimah (RA)"],
+          correct: 2
+        },
+        {
+          q: "Which companion was known as the Sword of Allah?",
+          options: ["Umar ibn Al-Khattab (RA)", "Khalid ibn Al-Walid (RA)", "Hamza ibn Abdul Muttalib (RA)", "Sad ibn Abi Waqqas (RA)"],
+          correct: 1
+        },
+        {
+          q: "How many years did the Prophet Muhammad receive revelation?",
+          options: ["20 years", "23 years", "25 years", "40 years"],
+          correct: 1
+        },
+        {
+          q: "Which battle is also known as Ghazwatul Ahzab?",
+          options: ["Battle of Badr", "Battle of Uhud", "Battle of Khandaq (Trench)", "Battle of Hunayn"],
+          correct: 2
+        }
+      ]
+    };
+
+    // ==================== STATE ====================
+    let playerName = "";
+    let selectedDifficulty = null;
+    let questions = [];
+    let currentQ = 0;
+    let score = 0;
+    let timer = null;
+    let timeLeft = 30;
+    let answered = false;
+    let userAnswers = [];
+    let scores = [];
+
+    // ==================== STORAGE ====================
+    function loadLocalScores() {
+      try {
+        scores = JSON.parse(localStorage.getItem("islamicQuizScores") || "[]");
+      } catch { scores = []; }
+    }
+
+    function saveLocalScore(name, score, difficulty) {
+      loadLocalScores();
+      scores.push({ name, score, difficulty, time: new Date().toISOString() });
+      scores.sort((a, b) => b.score - a.score || new Date(a.time) - new Date(b.time));
+      localStorage.setItem("islamicQuizScores", JSON.stringify(scores));
+    }
+
+    function saveScore(name, score, difficulty) {
+      if (useFirebase && db) {
+        db.ref("scores").push().set({
+          name, score, difficulty,
+          time: firebase.database.ServerValue.TIMESTAMP
+        });
+      } else {
+        saveLocalScore(name, score, difficulty);
+      }
+    }
+
+    function listenToScores(callback) {
+      if (useFirebase && db) {
+        db.ref("scores").orderByChild("score").limitToLast(40).on("value", snap => {
+          const data = [];
+          snap.forEach(c => data.push(c.val()));
+          data.sort((a, b) => b.score - a.score);
+          callback(data);
+        });
+      } else {
+        loadLocalScores();
+        callback(scores);
+      }
+    }
+
+    // ==================== UI ====================
+    function showScreen(id) {
+      document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+      document.getElementById(id).classList.add("active");
+    }
+
+    function showModal(title, text) {
+      document.getElementById("modalTitle").textContent = title;
+      document.getElementById("modalText").textContent = text;
+      document.getElementById("modal").classList.add("show");
+    }
+    function closeModal() {
+      document.getElementById("modal").classList.remove("show");
+    }
+
+    function selectDifficulty(level) {
+      selectedDifficulty = level;
+      document.querySelectorAll(".diff-btn").forEach(btn => {
+        btn.classList.toggle("selected", btn.dataset.diff === level);
+      });
+      document.getElementById("startBtn").disabled = false;
+    }
+
+    // ==================== QUIZ ====================
+    function startQuiz() {
+      playerName = document.getElementById("playerName").value.trim();
+      if (!playerName) {
+        showModal("Name Required", "Please enter your name first, inshaAllah.");
+        return;
+      }
+      if (!selectedDifficulty) {
+        showModal("Select Difficulty", "Please choose Easy, Medium or Hard.");
+        return;
+      }
+      document.getElementById("cheatModal").classList.add("show");
+    }
+
+    function closeCheatModal() {
+      document.getElementById("cheatModal").classList.remove("show");
+
+      questions = questionBanks[selectedDifficulty];
+      currentQ = 0;
+      score = 0;
+      answered = false;
+      userAnswers = [];
+
+      const tag = document.getElementById("diffTag");
+      tag.textContent = selectedDifficulty.charAt(0).toUpperCase() + selectedDifficulty.slice(1);
+      tag.className = "diff-tag " + selectedDifficulty;
+
+      showScreen("quiz-screen");
+      loadQuestion();
+    }
+
+    function loadQuestion() {
+      answered = false;
+      timeLeft = 30;
+      clearInterval(timer);
+
+      const q = questions[currentQ];
+      document.getElementById("questionCounter").textContent = "Question " + (currentQ + 1) + " of 5";
+      document.getElementById("questionText").textContent = q.q;
+      document.getElementById("progressFill").style.width = ((currentQ + 1) / 5 * 100) + "%";
+
+      const container = document.getElementById("optionsContainer");
+      container.innerHTML = "";
+      q.options.forEach((opt, idx) => {
+        const div = document.createElement("div");
+        div.className = "option";
+        div.textContent = opt;
+        div.onclick = () => selectAnswer(idx);
+        container.appendChild(div);
+      });
+
+      const fb = document.getElementById("feedback");
+      fb.className = "feedback";
+      fb.textContent = "";
+
+      updateTimerDisplay();
+      timer = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          if (!answered) handleTimeout();
+        }
+      }, 1000);
+    }
+
+    function updateTimerDisplay() {
+      const el = document.getElementById("timer");
+      el.textContent = timeLeft;
+      el.classList.remove("warning", "danger");
+      if (timeLeft <= 3) el.classList.add("danger");
+      else if (timeLeft <= 5) el.classList.add("warning");
+    }
+
+    function selectAnswer(idx) {
+      if (answered) return;
+      answered = true;
+      clearInterval(timer);
+
+      const q = questions[currentQ];
+      const options = document.querySelectorAll(".option");
+      options.forEach(o => o.classList.add("disabled"));
+      options[idx].classList.add("selected");
+
+      userAnswers[currentQ] = idx;
+
+      const fb = document.getElementById("feedback");
+      if (idx === q.correct) {
+        score++;
+        options[idx].classList.add("correct");
+        fb.textContent = "MashaAllah! Correct ✓";
+        fb.className = "feedback show correct";
+      } else {
+        options[idx].classList.add("wrong");
+        options[q.correct].classList.add("correct");
+        fb.textContent = "Incorrect. Correct answer is highlighted.";
+        fb.className = "feedback show wrong";
+      }
+
+      setTimeout(() => nextQuestion(), 1500);
+    }
+
+    function handleTimeout() {
+      answered = true;
+      const q = questions[currentQ];
+      const options = document.querySelectorAll(".option");
+      options.forEach(o => o.classList.add("disabled"));
+      options[q.correct].classList.add("correct");
+
+      userAnswers[currentQ] = -1;
+
+      const fb = document.getElementById("feedback");
+      fb.textContent = "Time's up! Correct answer is highlighted.";
+      fb.className = "feedback show wrong";
+
+      setTimeout(() => nextQuestion(), 1500);
+    }
+
+    function nextQuestion() {
+      currentQ++;
+      if (currentQ < questions.length) {
+        loadQuestion();
+      } else {
+        finishQuiz();
+      }
+    }
+
+    function finishQuiz() {
+      clearInterval(timer);
+
+      let message = "", sub = "";
+      if (score === 5) {
+        message = "SubhanAllah! Perfect Score!";
+        sub = "May Allah increase you in knowledge.";
+      } else if (score >= 4) {
+        message = "MashaAllah! Excellent!";
+        sub = "You did very well.";
+      } else if (score >= 3) {
+        message = "Alhamdulillah! Good effort.";
+        sub = "Keep seeking knowledge.";
+      } else {
+        message = "Keep going, inshaAllah!";
+        sub = "Every effort is rewarded.";
+      }
+
+      document.getElementById("finalScore").textContent = score;
+      document.getElementById("resultMessage").textContent = message;
+      document.getElementById("resultSub").textContent = sub;
+
+      // Wrong answers review
+      const wrongList = document.getElementById("wrongList");
+      const wrongReview = document.getElementById("wrongReview");
+      wrongList.innerHTML = "";
+      let hasWrong = false;
+
+      questions.forEach((q, i) => {
+        const userIdx = userAnswers[i];
+        if (userIdx !== q.correct) {
+          hasWrong = true;
+          const yourAns = userIdx === -1 ? "No answer (Time up)" : q.options[userIdx];
+          const div = document.createElement("div");
+          div.className = "wrong-item";
+          div.innerHTML = '<div class="q">' + (i + 1) + ". " + q.q + '</div>' +
+            '<div class="your">Your answer: ' + yourAns + '</div>' +
+            '<div class="correct-ans">Correct: ' + q.options[q.correct] + '</div>';
+          wrongList.appendChild(div);
+        }
+      });
+
+      wrongReview.style.display = hasWrong ? "block" : "none";
+
+      // Save score publicly
+      saveScore(playerName, score, selectedDifficulty);
+
+      showScreen("result-screen");
+
+      document.getElementById("scoreModalNumber").textContent = score;
+      document.getElementById("scoreModalTitle").textContent = message;
+      document.getElementById("scoreModalMessage").textContent = sub;
+      document.getElementById("scoreModal").classList.add("show");
+    }
+
+    function closeScoreModal() {
+      document.getElementById("scoreModal").classList.remove("show");
+    }
+
+    function closeScoreModalAndRestart() {
+      document.getElementById("scoreModal").classList.remove("show");
+      restartQuiz();
+    }
+
+    function restartQuiz() {
+      document.getElementById("playerName").value = playerName;
+      selectedDifficulty = null;
+      document.querySelectorAll(".diff-btn").forEach(b => b.classList.remove("selected"));
+      document.getElementById("startBtn").disabled = true;
+      showScreen("start-screen");
+    }
+
+    function goHome() {
+      showScreen("start-screen");
+    }
+
+    // ==================== LEADERBOARD ====================
+    function showLeaderboard() {
+      showScreen("leaderboard-screen");
+      renderLeaderboard();
+    }
+
+    function renderLeaderboard() {
+      listenToScores(function(data) {
+        const list = document.getElementById("leaderboardList");
+        const empty = document.getElementById("emptyLeaderboard");
+        list.innerHTML = "";
+
+        if (!data || data.length === 0) {
+          empty.style.display = "block";
+          return;
+        }
+        empty.style.display = "none";
+
+        data.slice(0, 15).forEach(function(item, i) {
+          const li = document.createElement("li");
+          li.className = "leaderboard-item";
+          if (i === 0) li.classList.add("top1");
+          else if (i === 1) li.classList.add("top2");
+          else if (i === 2) li.classList.add("top3");
+
+          const diff = item.difficulty ? item.difficulty.charAt(0).toUpperCase() + item.difficulty.slice(1) : "-";
+
+          li.innerHTML = '<div class="rank">' + (i + 1) + '</div>' +
+            '<div class="player-info">' +
+              '<div class="player-name">' + escapeHtml(item.name) + '</div>' +
+              '<div class="player-diff">' + diff + '</div>' +
+            '</div>' +
+            '<div class="player-score">' + item.score + '/5</div>';
+          list.appendChild(li);
+        });
+      });
+    }
+
+    function escapeHtml(text) {
+      const d = document.createElement("div");
+      d.textContent = text;
+      return d.innerHTML;
+    }
+
+    loadLocalScores();
+  </script>
+</body>
+</html>
