@@ -15,129 +15,341 @@ import {
 
 const questionBanks = {
   easy: [
-    {
-      q: "How many pillars of Islam are there?",
-      options: ["3", "4", "5", "7"],
-      correct: 2,
-    },
-    {
-      q: "What is the name of the holy book revealed to Prophet Muhammad ﷺ?",
-      options: ["Injil", "Tawrat", "Zabur", "Quran"],
-      correct: 3,
-    },
-    {
-      q: "In which month is fasting obligatory for Muslims?",
-      options: ["Shawwal", "Ramadan", "Rajab", "Muharram"],
-      correct: 1,
-    },
-    {
-      q: "Who is the final messenger of Allah?",
-      options: [
-        "Prophet Isa (AS)",
-        "Prophet Musa (AS)",
-        "Prophet Ibrahim (AS)",
-        "Prophet Muhammad ﷺ",
-      ],
-      correct: 3,
-    },
-    {
-      q: "What do Muslims face towards when they pray?",
-      options: [
-        "The rising sun",
-        "The Kaaba in Makkah",
-        "Jerusalem",
-        "Madinah",
-      ],
-      correct: 1,
-    },
-  ],
+  {
+    q: "Which Surah is recited in every Rak'ah of Salah?",
+    options: ["Al-Baqarah", "Al-Fatihah", "Al-Ikhlas", "An-Nas"],
+    correct: 1,
+  },
+  {
+    q: "How many obligatory prayers are there in a day?",
+    options: ["3", "4", "5", "6"],
+    correct: 2,
+  },
+  {
+    q: "Which angel brought revelation to Prophet Muhammad ﷺ?",
+    options: ["Mikail (AS)", "Israfil (AS)", "Jibril (AS)", "Malik (AS)"],
+    correct: 2,
+  },
+  {
+   q: "Which city did Prophet Muhammad ﷺ migrate to from Makkah?",
+    options: ["Ta'if", "Madinah", "Jerusalem", "Damascus"],
+    correct: 1,
+  },
+  {
+    q: "Which Surah is known as the 'Mother of the Book'?",
+    options: ["Al-Fatihah", "Al-Baqarah", "Al-Ikhlas", "Yasin"],
+    correct: 0,
+  },
+  {
+    q: "Which prayer is performed just after sunset?",
+    options: ["Fajr", "Dhuhr", "Asr", "Maghrib"],
+    correct: 3,
+  },
+  {
+    q: "Which Eid is celebrated during the month of Dhul-Hijjah?",
+    options: ["Eid al-Fitr", "Eid al-Adha", "Ashura", "Eid Milad"],
+    correct: 1,
+  },
+  {
+    q: "What is the direction faced by Muslims during Salah called?",
+    options: ["Qiblah", "Hijrah", "Mihrab", "Minbar"],
+    correct: 0,
+  },
+  {
+   q: "Which month comes immediately after Ramadan?",
+    options: ["Muharram", "Dhul-Hijjah", "Shawwal", "Rajab"],
+    correct: 2,
+  },
+  {
+  q: "What is the name of the well near the Kaaba?",
+    options: ["Zamzam", "Kawthar", "Salsabil", "Tabuk"],
+    correct: 0,
+  },
+],
+medium: [
 
-  medium: [
-    {
-      q: "Who was the first person to accept Islam?",
-      options: [
-        "Abu Bakr As-Siddiq (RA)",
-        "Ali ibn Abi Talib (RA)",
-        "Khadijah bint Khuwaylid (RA)",
-        "Zayd ibn Harithah (RA)",
-      ],
-      correct: 2,
-    },
-    {
-      q: "In which city was the Prophet Muhammad ﷺ born?",
-      options: ["Madinah", "Ta'if", "Makkah", "Yathrib"],
-      correct: 2,
-    },
-    {
-      q: "What is the name of the night journey of the Prophet ﷺ?",
-      options: [
-        "Hijrah",
-        "Isra and Mi'raj",
-        "Ghazwah",
-        "Fath Makkah",
-      ],
-      correct: 1,
-    },
-    {
-      q: "Which Surah is known as the 'Heart of the Quran'?",
-      options: [
-        "Surah Al-Fatihah",
-        "Surah Al-Mulk",
-        "Surah Yaseen",
-        "Surah Ar-Rahman",
-      ],
-      correct: 2,
-    },
-    {
-      q: "How many times is the word 'Allah' mentioned in Surah Al-Ikhlas?",
-      options: ["1 time", "2 times", "3 times", "4 times"],
-      correct: 1,
-    },
-  ],
+  {
+    q: "Who was the first woman to accept Islam?",
+    options: [
+      "Aisha (RA)",
+      "Khadijah (RA)",
+      "Fatimah (RA)",
+      "Hafsa (RA)",
+    ],
+    correct: 1,
+  },
+  {
+    q: "Who was known as Al-Farooq?",
+    options: [
+      "Abu Bakr (RA)",
+      "Uthman (RA)",
+      "Umar ibn Al-Khattab (RA)",
+      "Ali ibn Abi Talib (RA)",
+    ],
+    correct: 2,
+  },
+  {
+    q: "Which Surah contains Ayat al-Kursi?",
+    options: [
+      "Surah Al-Imran",
+      "Surah Al-Baqarah",
+      "Surah An-Nisa",
+      "Surah Al-Ma'idah",
+    ],
+    correct: 1,
+  },
+  {
+    q: "What was the name of Prophet Muhammad's ﷺ father?",
+    options: [
+      "Abu Talib",
+      "Abdullah",
+      "Abdul Muttalib",
+      "Hamzah",
+    ],
+    correct: 1,
+  },
+  {
+    q: "Which was the first major battle between the Muslims and Quraysh?",
+    options: [
+      "Battle of Uhud",
+      "Battle of Khandaq",
+      "Battle of Badr",
+      "Battle of Hunayn",
+    ],
+    correct: 2,
+  },
+  {
+    q: "Which companion was given the title Dhun-Nurayn?",
+    options: [
+      "Umar ibn Al-Khattab (RA)",
+      "Uthman ibn Affan (RA)",
+      "Ali ibn Abi Talib (RA)",
+      "Abu Bakr (RA)",
+    ],
+    correct: 1,
+  },
+  {
+    q: "Which Prophet built the Ark by the command of Allah?",
+    options: [
+      "Ibrahim (AS)",
+      "Nuh (AS)",
+      "Yusuf (AS)",
+      "Dawud (AS)",
+    ],
+    correct: 1,
+  },
 
+  {
+    q: "Which Surah is the longest Surah in the Quran?",
+    options: [
+      "Surah Al-Imran",
+      "Surah An-Nisa",
+      "Surah Al-Baqarah",
+      "Surah Al-A'raf",
+    ],
+    correct: 2,
+  },
+  {
+    q: "Which Surah is the shortest Surah in the Quran?",
+    options: [
+      "Al-Asr",
+      "Al-Kawthar",
+      "An-Nasr",
+      "Al-Ikhlas",
+    ],
+    correct: 1,
+  },
+  {
+    q: "Which Prophet was given the Zabur?",
+    options: [
+      "Musa (AS)",
+      "Isa (AS)",
+      "Dawud (AS)",
+      "Ibrahim (AS)",
+    ],
+    correct: 2,
+  },
+  {
+    q: "Which Prophet was swallowed by a large fish?",
+    options: [
+      "Yunus (AS)",
+      "Ayyub (AS)",
+      "Zakariyya (AS)",
+      "Yahya (AS)",
+    ],
+    correct: 0,
+  },
+  {
+    q: "How many Surahs are there in the Quran?",
+    options: [
+      "110",
+      "112",
+      "114",
+      "116",
+    ],
+    correct: 2,
+  },
+],
   hard: [
-    {
-      q: "In which year of the Hijrah was the Treaty of Hudaybiyyah signed?",
-      options: ["5 AH", "6 AH", "7 AH", "8 AH"],
-      correct: 1,
-    },
-    {
-      q: "Who was the only woman whose name is mentioned in the Quran?",
-      options: [
-        "Khadijah (RA)",
-        "Aisha (RA)",
-        "Maryam (AS)",
-        "Fatimah (RA)",
-      ],
-      correct: 2,
-    },
-    {
-      q: "Which companion was known as the Sword of Allah?",
-      options: [
-        "Umar ibn Al-Khattab (RA)",
-        "Khalid ibn Al-Walid (RA)",
-        "Hamza ibn Abdul Muttalib (RA)",
-        "Sad ibn Abi Waqqas (RA)",
-      ],
-      correct: 1,
-    },
-    {
-      q: "How many years did the Prophet Muhammad receive revelation?",
-      options: ["20 years", "23 years", "25 years", "40 years"],
-      correct: 1,
-    },
-    {
-      q: "Which battle is also known as Ghazwatul Ahzab?",
-      options: [
-        "Battle of Badr",
-        "Battle of Uhud",
-        "Battle of Khandaq (Trench)",
-        "Battle of Hunayn",
-      ],
-      correct: 2,
-    },
-  ],
+  {
+    q: "In which year of the Hijrah was the Treaty of Hudaybiyyah signed?",
+    options: ["5 AH", "6 AH", "7 AH", "8 AH"],
+    correct: 1,
+  },
+
+  {
+    q: "Who was the only woman whose name is mentioned in the Quran?",
+    options: [
+      "Khadijah (RA)",
+      "Aisha (RA)",
+      "Maryam (AS)",
+      "Fatimah (RA)",
+    ],
+    correct: 2,
+  },
+
+  {
+    q: "Which companion was known as the Sword of Allah?",
+    options: [
+      "Umar ibn Al-Khattab (RA)",
+      "Khalid ibn Al-Walid (RA)",
+      "Hamza ibn Abdul-Muttalib (RA)",
+      "Sa'd ibn Abi Waqqas (RA)",
+    ],
+    correct: 1,
+  },
+
+  {
+    q: "How many years did Prophet Muhammad ﷺ receive revelation?",
+    options: ["20 years", "23 years", "25 years", "40 years"],
+    correct: 1,
+  },
+
+  {
+    q: "Which battle is also known as Ghazwatul Ahzab?",
+    options: [
+      "Battle of Badr",
+      "Battle of Uhud",
+      "Battle of Khandaq (Trench)",
+      "Battle of Hunayn",
+    ],
+    correct: 2,
+  },
+
+  {
+    q: "Which companion was known as the Keeper of the Secrets of the Prophet ﷺ?",
+    options: [
+      "Abu Hurairah (RA)",
+      "Hudhayfah ibn Al-Yaman (RA)",
+      "Anas ibn Malik (RA)",
+      "Abdullah ibn Umar (RA)",
+    ],
+    correct: 1,
+  },
+
+  {
+    q: "Who accompanied Prophet Muhammad ﷺ during the Hijrah and stayed with him in the Cave of Thawr?",
+    options: [
+      "Umar ibn Al-Khattab (RA)",
+      "Abu Bakr As-Siddiq (RA)",
+      "Ali ibn Abi Talib (RA)",
+      "Uthman ibn Affan (RA)",
+    ],
+    correct: 1,
+  },
+
+  {
+    q: "Which event happened first?",
+    options: [
+      "Battle of Uhud",
+      "Battle of Badr",
+      "Treaty of Hudaybiyyah",
+      "Conquest of Makkah",
+    ],
+    correct: 1,
+  },
+
+  {
+    q: "Which companion was sent to Madinah before the Hijrah to teach people about Islam?",
+    options: [
+      "Mus'ab ibn Umayr (RA)",
+      "Mu'adh ibn Jabal (RA)",
+      "Zayd ibn Thabit (RA)",
+      "Abu Musa Al-Ash'ari (RA)",
+    ],
+    correct: 0,
+  },
+
+  {
+    q: "During the Hijrah, who slept in the Prophet's ﷺ bed to help mislead the Quraysh?",
+    options: [
+      "Ali ibn Abi Talib (RA)",
+      "Abu Bakr As-Siddiq (RA)",
+      "Umar ibn Al-Khattab (RA)",
+      "Zubayr ibn Al-Awwam (RA)",
+    ],
+    correct: 0,
+  },
+
+  {
+    q: "Which companion was known as Dhul-Nurayn because he married two daughters of the Prophet ﷺ?",
+    options: [
+      "Ali ibn Abi Talib (RA)",
+      "Uthman ibn Affan (RA)",
+      "Abu Bakr As-Siddiq (RA)",
+      "Abdur-Rahman ibn Awf (RA)",
+    ],
+    correct: 1,
+  },
+
+  {
+    q: "Which companion was given the title Hawariyy, meaning a close supporter of the Prophet ﷺ?",
+    options: [
+      "Zubayr ibn Al-Awwam (RA)",
+      "Talhah ibn Ubaydillah (RA)",
+      "Sa'd ibn Abi Waqqas (RA)",
+      "Abdur-Rahman ibn Awf (RA)",
+    ],
+    correct: 0,
+  },
+
+  {
+    q: "Which companion was famously known for his great wealth and generosity among the companions?",
+    options: [
+      "Abdur-Rahman ibn Awf (RA)",
+      "Abu Hurairah (RA)",
+      "Bilal ibn Rabah (RA)",
+      "Ammar ibn Yasir (RA)",
+    ],
+    correct: 0,
+  },
+
+  {
+    q: "Which companion led the Muslim forces at the Battle of Mu'tah after Zayd ibn Harithah and Ja'far ibn Abi Talib were martyred?",
+    options: [
+      "Khalid ibn Al-Walid (RA)",
+      "Abu Ubaidah ibn Al-Jarrah (RA)",
+      "Sa'd ibn Abi Waqqas (RA)",
+      "Talhah ibn Ubaydillah (RA)",
+    ],
+    correct: 0,
+  },
+
+  {
+    q: "Which companion was sent by the Prophet ﷺ to Yemen to teach Islam and judge between the people?",
+    options: [
+      "Mu'adh ibn Jabal (RA)",
+      "Mus'ab ibn Umayr (RA)",
+      "Abu Musa Al-Ash'ari (RA)",
+      "Zayd ibn Thabit (RA)",
+    ],
+    correct: 0,
+  },
+],
+
 };
+
+
 
 const POINTS = {
   easy: 1,
@@ -702,7 +914,7 @@ export default function IslamicQuiz() {
 
               <div>
                 <span className="font-semibold text-emerald-800 text-sm">
-                  Question {currentQ + 1} of 5
+                  Question {currentQ + 1} of {questions.length}
                 </span>
 
                 <span
