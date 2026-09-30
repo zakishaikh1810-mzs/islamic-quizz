@@ -1,12 +1,14 @@
 import { useState, useEffect, useRef } from "react";
-import { db } from "../firebase"; // make sure path is correct
+import { db } from "../firebase";
 import { 
   collection, 
   addDoc, 
   onSnapshot, 
   query, 
   orderBy, 
-  limit 
+  limit,
+  getDocs,
+  where
 } from "firebase/firestore";
 
 // ==================== QUESTIONS ====================
@@ -34,12 +36,12 @@ const questionBanks = {
   ],
 };
 
-// Points system (Fair ranking)
 const POINTS = { easy: 1, medium: 2, hard: 3 };
 
 export default function IslamicQuiz() {
   const [screen, setScreen] = useState("start");
-  const [playerName, setPlayerName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [selectedDifficulty, setSelectedDifficulty] = useState(null);
   const [questions, setQuestions] = useState([]);
   const [currentQ, setCurrentQ] = useState(0);
@@ -53,15 +55,17 @@ export default function IslamicQuiz() {
   const [showScoreModal, setShowScoreModal] = useState(false);
   const [leaderboard, setLeaderboard] = useState([]);
   const [infoModal, setInfoModal] = useState(null);
+  const [myFullName, setMyFullName] = useState("");
 
   const timerRef = useRef(null);
+  const myRowRef = useRef(null);
 
   // Live Leaderboard from Firestore
   useEffect(() => {
     const q = query(
       collection(db, "scores"),
       orderBy("points", "desc"),
-      limit(20)
+      limit(50)
     );
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -75,6 +79,15 @@ export default function IslamicQuiz() {
     return () => unsubscribe();
   }, []);
 
+  // Auto-scroll to YOUR row
+  useEffect(() => {
+    if (screen === "leaderboard" && myFullName && myRowRef.current) {
+      setTimeout(() => {
+        myRowRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+      }, 300);
+    }
+  }, [screen, leaderboard, myFullName]);
+
   // Timer
   useEffect(() => {
     if (screen !== "quiz" || answered) return;
@@ -86,9 +99,21 @@ export default function IslamicQuiz() {
     return () => clearTimeout(timerRef.current);
   }, [timeLeft, screen, answered]);
 
+  const getFullName = () => {
+    return `${firstName.trim()} ${lastName.trim()}`.replace(/\s+/g, " ").trim();
+  };
+
+  const checkNameExists = async (fullName) => {
+    const q = query(
+      collection(db, "scores"),
+      where("name", "==", fullName)
+    );
+    const snapshot = await getDocs(q);
+    return !snapshot.empty;
+  };
+
   const saveScore = async (name, scoreVal, difficulty) => {
     const points = scoreVal * (POINTS[difficulty] || 1);
-
     try {
       await addDoc(collection(db, "scores"), {
         name,
@@ -102,15 +127,27 @@ export default function IslamicQuiz() {
     }
   };
 
-  const startQuiz = () => {
-    if (!playerName.trim()) {
-      setInfoModal({ title: "Name Required", text: "Please enter your name first, inshaAllah." });
+  const startQuiz = async () => {
+    if (!firstName.trim() || !lastName.trim()) {
+      setInfoModal({ title: "Name Required", text: "Please enter both First Name and Last Name." });
       return;
     }
     if (!selectedDifficulty) {
       setInfoModal({ title: "Select Difficulty", text: "Please choose Easy, Medium or Hard." });
       return;
     }
+
+    const fullName = getFullName();
+    const exists = await checkNameExists(fullName);
+    if (exists) {
+      setInfoModal({ 
+        title: "Name Already Taken", 
+        text: `"${fullName}" has already played. Please use a different name combination.` 
+      });
+      return;
+    }
+
+    setMyFullName(fullName);
     setShowCheatModal(true);
   };
 
@@ -172,7 +209,8 @@ export default function IslamicQuiz() {
 
   const finishQuiz = () => {
     clearTimeout(timerRef.current);
-    saveScore(playerName.trim(), score, selectedDifficulty);
+    const fullName = getFullName();
+    saveScore(fullName, score, selectedDifficulty);
     setScreen("result");
     setShowScoreModal(true);
   };
@@ -200,14 +238,26 @@ export default function IslamicQuiz() {
             <h1 className="text-center font-serif text-3xl text-emerald-800 mb-1">Islamic Knowledge Quiz</h1>
             <p className="text-center text-gray-600 text-sm mb-6">5 Questions • 30 seconds each</p>
 
-            <div className="mb-5">
-              <label className="block font-medium mb-2 text-sm">Enter your name</label>
+            <div className="mb-4">
+              <label className="block font-medium mb-2 text-sm">First Name</label>
               <input
                 type="text"
-                value={playerName}
-                onChange={(e) => setPlayerName(e.target.value)}
-                placeholder="Your beautiful name..."
-                maxLength={25}
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                placeholder="First name..."
+                maxLength={20}
+                className="w-full px-4 py-3 rounded-xl border-2 border-emerald-100 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-200 outline-none"
+              />
+            </div>
+
+            <div className="mb-5">
+              <label className="block font-medium mb-2 text-sm">Last Name</label>
+              <input
+                type="text"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                placeholder="Last name..."
+                maxLength={20}
                 className="w-full px-4 py-3 rounded-xl border-2 border-emerald-100 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-200 outline-none"
               />
             </div>
@@ -384,34 +434,44 @@ export default function IslamicQuiz() {
               Live Updates
             </div>
 
-            <ul className="space-y-2 mb-5">
+            <ul className="space-y-2 mb-5 max-h-[400px] overflow-y-auto">
               {leaderboard.length === 0 && (
                 <p className="text-center text-gray-500 py-6">No scores yet. Be the first!</p>
               )}
-              {leaderboard.map((item, i) => (
-                <li
-                  key={item.id || i}
-                  className={`flex items-center p-3 rounded-xl border
-                    ${i === 0 ? "bg-gradient-to-r from-amber-50 to-amber-100 border-amber-300" :
-                      i === 1 ? "bg-gray-100 border-gray-200" :
-                      i === 2 ? "bg-orange-50 border-orange-200" :
-                      "bg-white border-emerald-100"}`}
-                >
-                  <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold text-white mr-3
-                    ${i === 0 ? "bg-amber-500 text-gray-900" : i === 1 ? "bg-gray-400" : i === 2 ? "bg-orange-600" : "bg-emerald-700"}`}>
-                    {i + 1}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="font-medium truncate">{item.name}</div>
-                    <div className="text-xs text-gray-500">
-                      {item.difficulty ? item.difficulty.charAt(0).toUpperCase() + item.difficulty.slice(1) : "-"} • {item.score}/5
+              {leaderboard.map((item, i) => {
+                const isYou = myFullName && item.name === myFullName;
+                return (
+                  <li
+                    key={item.id || i}
+                    ref={isYou ? myRowRef : null}
+                    className={`flex items-center p-3 rounded-xl border
+                      ${isYou ? "ring-2 ring-red-500 border-red-400 bg-red-50" :
+                        i === 0 ? "bg-gradient-to-r from-amber-50 to-amber-100 border-amber-300" :
+                        i === 1 ? "bg-gray-100 border-gray-200" :
+                        i === 2 ? "bg-orange-50 border-orange-200" :
+                        "bg-white border-emerald-100"}`}
+                  >
+                    <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold text-white mr-3
+                      ${i === 0 ? "bg-amber-500 text-gray-900" : i === 1 ? "bg-gray-400" : i === 2 ? "bg-orange-600" : "bg-emerald-700"}`}>
+                      {i + 1}
                     </div>
-                  </div>
-                  <div className="text-right">
-                    <div className="font-bold text-emerald-700">{item.points || 0} pts</div>
-                  </div>
-                </li>
-              ))}
+                    <div className="flex-1 min-w-0">
+                      <div className="font-medium truncate">{item.name}</div>
+                      <div className="text-xs text-gray-500">
+                        {item.difficulty ? item.difficulty.charAt(0).toUpperCase() + item.difficulty.slice(1) : "-"} • {item.score}/5
+                      </div>
+                    </div>
+                    <div className="text-right flex items-center gap-2">
+                      {isYou && (
+                        <span className="text-[10px] font-bold text-red-600 border border-red-500 rounded px-1.5 py-0.5">
+                          YOU
+                        </span>
+                      )}
+                      <div className="font-bold text-emerald-700">{item.points || 0} pts</div>
+                    </div>
+                  </li>
+                );
+              })}
             </ul>
 
             <button
