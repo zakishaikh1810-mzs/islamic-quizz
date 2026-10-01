@@ -9,347 +9,328 @@ import {
   limit,
   getDocs,
   where,
+  updateDoc,
 } from "firebase/firestore";
 
 // ==================== QUESTIONS ====================
 
 const questionBanks = {
   easy: [
-  {
-    q: "Which Surah is recited in every Rak'ah of Salah?",
-    options: ["Al-Baqarah", "Al-Fatihah", "Al-Ikhlas", "An-Nas"],
-    correct: 1,
-  },
-  {
-    q: "How many obligatory prayers are there in a day?",
-    options: ["3", "4", "5", "6"],
-    correct: 2,
-  },
-  {
-    q: "Which angel brought revelation to Prophet Muhammad ﷺ?",
-    options: ["Mikail (AS)", "Israfil (AS)", "Jibril (AS)", "Malik (AS)"],
-    correct: 2,
-  },
-  {
-   q: "Which city did Prophet Muhammad ﷺ migrate to from Makkah?",
-    options: ["Ta'if", "Madinah", "Jerusalem", "Damascus"],
-    correct: 1,
-  },
-  {
-    q: "Which Surah is known as the 'Mother of the Book'?",
-    options: ["Al-Fatihah", "Al-Baqarah", "Al-Ikhlas", "Yasin"],
-    correct: 0,
-  },
-  {
-    q: "Which prayer is performed just after sunset?",
-    options: ["Fajr", "Dhuhr", "Asr", "Maghrib"],
-    correct: 3,
-  },
-  {
-    q: "Which Eid is celebrated during the month of Dhul-Hijjah?",
-    options: ["Eid al-Fitr", "Eid al-Adha", "Ashura", "Eid Milad"],
-    correct: 1,
-  },
-  {
-    q: "What is the direction faced by Muslims during Salah called?",
-    options: ["Qiblah", "Hijrah", "Mihrab", "Minbar"],
-    correct: 0,
-  },
-  {
-   q: "Which month comes immediately after Ramadan?",
-    options: ["Muharram", "Dhul-Hijjah", "Shawwal", "Rajab"],
-    correct: 2,
-  },
-  {
-  q: "What is the name of the well near the Kaaba?",
-    options: ["Zamzam", "Kawthar", "Salsabil", "Tabuk"],
-    correct: 0,
-  },
-],
-medium: [
+    {
+      q: "Which Surah is recited in every Rak'ah of Salah?",
+      options: ["Al-Baqarah", "Al-Fatihah", "Al-Ikhlas", "An-Nas"],
+      correct: 1,
+    },
+    {
+      q: "How many obligatory prayers are there in a day?",
+      options: ["3", "4", "5", "6"],
+      correct: 2,
+    },
+    {
+      q: "Which angel brought revelation to Prophet Muhammad ﷺ?",
+      options: ["Mikail (AS)", "Israfil (AS)", "Jibril (AS)", "Malik (AS)"],
+      correct: 2,
+    },
+    {
+      q: "Which city did Prophet Muhammad ﷺ migrate to from Makkah?",
+      options: ["Ta'if", "Madinah", "Jerusalem", "Damascus"],
+      correct: 1,
+    },
+    {
+      q: "Which Surah is known as the 'Mother of the Book'?",
+      options: ["Al-Fatihah", "Al-Baqarah", "Al-Ikhlas", "Yasin"],
+      correct: 0,
+    },
+    {
+      q: "Which prayer is performed just after sunset?",
+      options: ["Fajr", "Dhuhr", "Asr", "Maghrib"],
+      correct: 3,
+    },
+    {
+      q: "Which Eid is celebrated during the month of Dhul-Hijjah?",
+      options: ["Eid al-Fitr", "Eid al-Adha", "Ashura", "Eid Milad"],
+      correct: 1,
+    },
+    {
+      q: "What is the direction faced by Muslims during Salah called?",
+      options: ["Qiblah", "Hijrah", "Mihrab", "Minbar"],
+      correct: 0,
+    },
+    {
+      q: "Which month comes immediately after Ramadan?",
+      options: ["Muharram", "Dhul-Hijjah", "Shawwal", "Rajab"],
+      correct: 2,
+    },
+    {
+      q: "What is the name of the well near the Kaaba?",
+      options: ["Zamzam", "Kawthar", "Salsabil", "Tabuk"],
+      correct: 0,
+    },
+  ],
 
-  {
-    q: "Who was the first woman to accept Islam?",
-    options: [
-      "Aisha (RA)",
-      "Khadijah (RA)",
-      "Fatimah (RA)",
-      "Hafsa (RA)",
-    ],
-    correct: 1,
-  },
-  {
-    q: "Who was known as Al-Farooq?",
-    options: [
-      "Abu Bakr (RA)",
-      "Uthman (RA)",
-      "Umar ibn Al-Khattab (RA)",
-      "Ali ibn Abi Talib (RA)",
-    ],
-    correct: 2,
-  },
-  {
-    q: "Which Surah contains Ayat al-Kursi?",
-    options: [
-      "Surah Al-Imran",
-      "Surah Al-Baqarah",
-      "Surah An-Nisa",
-      "Surah Al-Ma'idah",
-    ],
-    correct: 1,
-  },
-  {
-    q: "What was the name of Prophet Muhammad's ﷺ father?",
-    options: [
-      "Abu Talib",
-      "Abdullah",
-      "Abdul Muttalib",
-      "Hamzah",
-    ],
-    correct: 1,
-  },
-  {
-    q: "Which was the first major battle between the Muslims and Quraysh?",
-    options: [
-      "Battle of Uhud",
-      "Battle of Khandaq",
-      "Battle of Badr",
-      "Battle of Hunayn",
-    ],
-    correct: 2,
-  },
-  {
-    q: "Which companion was given the title Dhun-Nurayn?",
-    options: [
-      "Umar ibn Al-Khattab (RA)",
-      "Uthman ibn Affan (RA)",
-      "Ali ibn Abi Talib (RA)",
-      "Abu Bakr (RA)",
-    ],
-    correct: 1,
-  },
-  {
-    q: "Which Prophet built the Ark by the command of Allah?",
-    options: [
-      "Ibrahim (AS)",
-      "Nuh (AS)",
-      "Yusuf (AS)",
-      "Dawud (AS)",
-    ],
-    correct: 1,
-  },
+  medium: [
+    {
+      q: "Who was the first woman to accept Islam?",
+      options: [
+        "Aisha (RA)",
+        "Khadijah (RA)",
+        "Fatimah (RA)",
+        "Hafsa (RA)",
+      ],
+      correct: 1,
+    },
+    {
+      q: "Who was known as Al-Farooq?",
+      options: [
+        "Abu Bakr (RA)",
+        "Uthman (RA)",
+        "Umar ibn Al-Khattab (RA)",
+        "Ali ibn Abi Talib (RA)",
+      ],
+      correct: 2,
+    },
+    {
+      q: "Which Surah contains Ayat al-Kursi?",
+      options: [
+        "Surah Al-Imran",
+        "Surah Al-Baqarah",
+        "Surah An-Nisa",
+        "Surah Al-Ma'idah",
+      ],
+      correct: 1,
+    },
+    {
+      q: "What was the name of Prophet Muhammad's ﷺ father?",
+      options: [
+        "Abu Talib",
+        "Abdullah",
+        "Abdul Muttalib",
+        "Hamzah",
+      ],
+      correct: 1,
+    },
+    {
+      q: "Which was the first major battle between the Muslims and Quraysh?",
+      options: [
+        "Battle of Uhud",
+        "Battle of Khandaq",
+        "Battle of Badr",
+        "Battle of Hunayn",
+      ],
+      correct: 2,
+    },
+    {
+      q: "Which companion was given the title Dhun-Nurayn?",
+      options: [
+        "Umar ibn Al-Khattab (RA)",
+        "Uthman ibn Affan (RA)",
+        "Ali ibn Abi Talib (RA)",
+        "Abu Bakr (RA)",
+      ],
+      correct: 1,
+    },
+    {
+      q: "Which Prophet built the Ark by the command of Allah?",
+      options: [
+        "Ibrahim (AS)",
+        "Nuh (AS)",
+        "Yusuf (AS)",
+        "Dawud (AS)",
+      ],
+      correct: 1,
+    },
+    {
+      q: "Which Surah is the longest Surah in the Quran?",
+      options: [
+        "Surah Al-Imran",
+        "Surah An-Nisa",
+        "Surah Al-Baqarah",
+        "Surah Al-A'raf",
+      ],
+      correct: 2,
+    },
+    {
+      q: "Which Surah is the shortest Surah in the Quran?",
+      options: [
+        "Al-Asr",
+        "Al-Kawthar",
+        "An-Nasr",
+        "Al-Ikhlas",
+      ],
+      correct: 1,
+    },
+    {
+      q: "Which Prophet was given the Zabur?",
+      options: [
+        "Musa (AS)",
+        "Isa (AS)",
+        "Dawud (AS)",
+        "Ibrahim (AS)",
+      ],
+      correct: 2,
+    },
+    {
+      q: "Which Prophet was swallowed by a large fish?",
+      options: [
+        "Yunus (AS)",
+        "Ayyub (AS)",
+        "Zakariyya (AS)",
+        "Yahya (AS)",
+      ],
+      correct: 0,
+    },
+    {
+      q: "How many Surahs are there in the Quran?",
+      options: ["110", "112", "114", "116"],
+      correct: 2,
+    },
+  ],
 
-  {
-    q: "Which Surah is the longest Surah in the Quran?",
-    options: [
-      "Surah Al-Imran",
-      "Surah An-Nisa",
-      "Surah Al-Baqarah",
-      "Surah Al-A'raf",
-    ],
-    correct: 2,
-  },
-  {
-    q: "Which Surah is the shortest Surah in the Quran?",
-    options: [
-      "Al-Asr",
-      "Al-Kawthar",
-      "An-Nasr",
-      "Al-Ikhlas",
-    ],
-    correct: 1,
-  },
-  {
-    q: "Which Prophet was given the Zabur?",
-    options: [
-      "Musa (AS)",
-      "Isa (AS)",
-      "Dawud (AS)",
-      "Ibrahim (AS)",
-    ],
-    correct: 2,
-  },
-  {
-    q: "Which Prophet was swallowed by a large fish?",
-    options: [
-      "Yunus (AS)",
-      "Ayyub (AS)",
-      "Zakariyya (AS)",
-      "Yahya (AS)",
-    ],
-    correct: 0,
-  },
-  {
-    q: "How many Surahs are there in the Quran?",
-    options: [
-      "110",
-      "112",
-      "114",
-      "116",
-    ],
-    correct: 2,
-  },
-],
   hard: [
-  {
-    q: "In which year of the Hijrah was the Treaty of Hudaybiyyah signed?",
-    options: ["5 AH", "6 AH", "7 AH", "8 AH"],
-    correct: 1,
-  },
-
-  {
-    q: "Who was the only woman whose name is mentioned in the Quran?",
-    options: [
-      "Khadijah (RA)",
-      "Aisha (RA)",
-      "Maryam (AS)",
-      "Fatimah (RA)",
-    ],
-    correct: 2,
-  },
-
-  {
-    q: "Which companion was known as the Sword of Allah?",
-    options: [
-      "Umar ibn Al-Khattab (RA)",
-      "Khalid ibn Al-Walid (RA)",
-      "Hamza ibn Abdul-Muttalib (RA)",
-      "Sa'd ibn Abi Waqqas (RA)",
-    ],
-    correct: 1,
-  },
-
-  {
-    q: "How many years did Prophet Muhammad ﷺ receive revelation?",
-    options: ["20 years", "23 years", "25 years", "40 years"],
-    correct: 1,
-  },
-
-  {
-    q: "Which battle is also known as Ghazwatul Ahzab?",
-    options: [
-      "Battle of Badr",
-      "Battle of Uhud",
-      "Battle of Khandaq (Trench)",
-      "Battle of Hunayn",
-    ],
-    correct: 2,
-  },
-
-  {
-    q: "Which companion was known as the Keeper of the Secrets of the Prophet ﷺ?",
-    options: [
-      "Abu Hurairah (RA)",
-      "Hudhayfah ibn Al-Yaman (RA)",
-      "Anas ibn Malik (RA)",
-      "Abdullah ibn Umar (RA)",
-    ],
-    correct: 1,
-  },
-
-  {
-    q: "Who accompanied Prophet Muhammad ﷺ during the Hijrah and stayed with him in the Cave of Thawr?",
-    options: [
-      "Umar ibn Al-Khattab (RA)",
-      "Abu Bakr As-Siddiq (RA)",
-      "Ali ibn Abi Talib (RA)",
-      "Uthman ibn Affan (RA)",
-    ],
-    correct: 1,
-  },
-
-  {
-    q: "Which event happened first?",
-    options: [
-      "Battle of Uhud",
-      "Battle of Badr",
-      "Treaty of Hudaybiyyah",
-      "Conquest of Makkah",
-    ],
-    correct: 1,
-  },
-
-  {
-    q: "Which companion was sent to Madinah before the Hijrah to teach people about Islam?",
-    options: [
-      "Mus'ab ibn Umayr (RA)",
-      "Mu'adh ibn Jabal (RA)",
-      "Zayd ibn Thabit (RA)",
-      "Abu Musa Al-Ash'ari (RA)",
-    ],
-    correct: 0,
-  },
-
-  {
-    q: "During the Hijrah, who slept in the Prophet's ﷺ bed to help mislead the Quraysh?",
-    options: [
-      "Ali ibn Abi Talib (RA)",
-      "Abu Bakr As-Siddiq (RA)",
-      "Umar ibn Al-Khattab (RA)",
-      "Zubayr ibn Al-Awwam (RA)",
-    ],
-    correct: 0,
-  },
-
-  {
-    q: "Which companion was known as Dhul-Nurayn because he married two daughters of the Prophet ﷺ?",
-    options: [
-      "Ali ibn Abi Talib (RA)",
-      "Uthman ibn Affan (RA)",
-      "Abu Bakr As-Siddiq (RA)",
-      "Abdur-Rahman ibn Awf (RA)",
-    ],
-    correct: 1,
-  },
-
-  {
-    q: "Which companion was given the title Hawariyy, meaning a close supporter of the Prophet ﷺ?",
-    options: [
-      "Zubayr ibn Al-Awwam (RA)",
-      "Talhah ibn Ubaydillah (RA)",
-      "Sa'd ibn Abi Waqqas (RA)",
-      "Abdur-Rahman ibn Awf (RA)",
-    ],
-    correct: 0,
-  },
-
-  {
-    q: "Which companion was famously known for his great wealth and generosity among the companions?",
-    options: [
-      "Abdur-Rahman ibn Awf (RA)",
-      "Abu Hurairah (RA)",
-      "Bilal ibn Rabah (RA)",
-      "Ammar ibn Yasir (RA)",
-    ],
-    correct: 0,
-  },
-
-  {
-    q: "Which companion led the Muslim forces at the Battle of Mu'tah after Zayd ibn Harithah and Ja'far ibn Abi Talib were martyred?",
-    options: [
-      "Khalid ibn Al-Walid (RA)",
-      "Abu Ubaidah ibn Al-Jarrah (RA)",
-      "Sa'd ibn Abi Waqqas (RA)",
-      "Talhah ibn Ubaydillah (RA)",
-    ],
-    correct: 0,
-  },
-
-  {
-    q: "Which companion was sent by the Prophet ﷺ to Yemen to teach Islam and judge between the people?",
-    options: [
-      "Mu'adh ibn Jabal (RA)",
-      "Mus'ab ibn Umayr (RA)",
-      "Abu Musa Al-Ash'ari (RA)",
-      "Zayd ibn Thabit (RA)",
-    ],
-    correct: 0,
-  },
-],
-
+    {
+      q: "In which year of the Hijrah was the Treaty of Hudaybiyyah signed?",
+      options: ["5 AH", "6 AH", "7 AH", "8 AH"],
+      correct: 1,
+    },
+    {
+      q: "Who was the only woman whose name is mentioned in the Quran?",
+      options: [
+        "Khadijah (RA)",
+        "Aisha (RA)",
+        "Maryam (AS)",
+        "Fatimah (RA)",
+      ],
+      correct: 2,
+    },
+    {
+      q: "Which companion was known as the Sword of Allah?",
+      options: [
+        "Umar ibn Al-Khattab (RA)",
+        "Khalid ibn Al-Walid (RA)",
+        "Hamza ibn Abdul-Muttalib (RA)",
+        "Sa'd ibn Abi Waqqas (RA)",
+      ],
+      correct: 1,
+    },
+    {
+      q: "How many years did Prophet Muhammad ﷺ receive revelation?",
+      options: ["20 years", "23 years", "25 years", "40 years"],
+      correct: 1,
+    },
+    {
+      q: "Which battle is also known as Ghazwatul Ahzab?",
+      options: [
+        "Battle of Badr",
+        "Battle of Uhud",
+        "Battle of Khandaq (Trench)",
+        "Battle of Hunayn",
+      ],
+      correct: 2,
+    },
+    {
+      q: "Which companion was known as the Keeper of the Secrets of the Prophet ﷺ?",
+      options: [
+        "Abu Hurairah (RA)",
+        "Hudhayfah ibn Al-Yaman (RA)",
+        "Anas ibn Malik (RA)",
+        "Abdullah ibn Umar (RA)",
+      ],
+      correct: 1,
+    },
+    {
+      q: "Who accompanied Prophet Muhammad ﷺ during the Hijrah and stayed with him in the Cave of Thawr?",
+      options: [
+        "Umar ibn Al-Khattab (RA)",
+        "Abu Bakr As-Siddiq (RA)",
+        "Ali ibn Abi Talib (RA)",
+        "Uthman ibn Affan (RA)",
+      ],
+      correct: 1,
+    },
+    {
+      q: "Which event happened first?",
+      options: [
+        "Battle of Uhud",
+        "Battle of Badr",
+        "Treaty of Hudaybiyyah",
+        "Conquest of Makkah",
+      ],
+      correct: 1,
+    },
+    {
+      q: "Which companion was sent to Madinah before the Hijrah to teach people about Islam?",
+      options: [
+        "Mus'ab ibn Umayr (RA)",
+        "Mu'adh ibn Jabal (RA)",
+        "Zayd ibn Thabit (RA)",
+        "Abu Musa Al-Ash'ari (RA)",
+      ],
+      correct: 0,
+    },
+    {
+      q: "During the Hijrah, who slept in the Prophet's ﷺ bed to help mislead the Quraysh?",
+      options: [
+        "Ali ibn Abi Talib (RA)",
+        "Abu Bakr As-Siddiq (RA)",
+        "Umar ibn Al-Khattab (RA)",
+        "Zubayr ibn Al-Awwam (RA)",
+      ],
+      correct: 0,
+    },
+    {
+      q: "Which companion was known as Dhul-Nurayn because he married two daughters of the Prophet ﷺ?",
+      options: [
+        "Ali ibn Abi Talib (RA)",
+        "Uthman ibn Affan (RA)",
+        "Abu Bakr As-Siddiq (RA)",
+        "Abdur-Rahman ibn Awf (RA)",
+      ],
+      correct: 1,
+    },
+    {
+      q: "Which companion was given the title Hawariyy, meaning a close supporter of the Prophet ﷺ?",
+      options: [
+        "Zubayr ibn Al-Awwam (RA)",
+        "Talhah ibn Ubaydillah (RA)",
+        "Sa'd ibn Abi Waqqas (RA)",
+        "Abdur-Rahman ibn Awf (RA)",
+      ],
+      correct: 0,
+    },
+    {
+      q: "Which companion was famously known for his great wealth and generosity among the companions?",
+      options: [
+        "Abdur-Rahman ibn Awf (RA)",
+        "Abu Hurairah (RA)",
+        "Bilal ibn Rabah (RA)",
+        "Ammar ibn Yasir (RA)",
+      ],
+      correct: 0,
+    },
+    {
+      q: "Which companion led the Muslim forces at the Battle of Mu'tah after Zayd ibn Harithah and Ja'far ibn Abi Talib were martyred?",
+      options: [
+        "Khalid ibn Al-Walid (RA)",
+        "Abu Ubaidah ibn Al-Jarrah (RA)",
+        "Sa'd ibn Abi Waqqas (RA)",
+        "Talhah ibn Ubaydillah (RA)",
+      ],
+      correct: 0,
+    },
+    {
+      q: "Which companion was sent by the Prophet ﷺ to Yemen to teach Islam and judge between the people?",
+      options: [
+        "Mu'adh ibn Jabal (RA)",
+        "Mus'ab ibn Umayr (RA)",
+        "Abu Musa Al-Ash'ari (RA)",
+        "Zayd ibn Thabit (RA)",
+      ],
+      correct: 0,
+    },
+  ],
 };
 
-
+// ==================== POINTS ====================
 
 const POINTS = {
   easy: 1,
@@ -385,7 +366,7 @@ export default function IslamicQuiz() {
 
   const [infoModal, setInfoModal] = useState(null);
 
-  // Exact score document that belongs to this player/session.
+  // Exact leaderboard document belonging to this player
   const [myScoreId, setMyScoreId] = useState(null);
 
   const timerRef = useRef(null);
@@ -424,7 +405,7 @@ export default function IslamicQuiz() {
   useEffect(() => {
     const leaderboardQuery = query(
       collection(db, "scores"),
-      orderBy("points", "desc"),
+      orderBy("totalPoints", "desc"),
       limit(100)
     );
 
@@ -508,45 +489,204 @@ export default function IslamicQuiz() {
 
       const snapshot = await getDocs(nameQuery);
 
-      const alreadyPlayed = snapshot.docs.some((doc) => {
-        const data = doc.data();
+      if (snapshot.empty) {
+        return false;
+      }
 
-        return data.difficulty === difficulty;
-      });
+      const data = snapshot.docs[0].data();
 
-      return alreadyPlayed;
+      return data[`${difficulty}Played`] === true;
     } catch (error) {
-      console.error("Checking previous score failed:", error);
+      console.error(
+        "Checking previous score failed:",
+        error
+      );
+
       return false;
     }
   };
 
   // ==================== SAVE SCORE ====================
 
-  const saveScore = async (name, scoreVal, difficulty) => {
-    const points = scoreVal * (POINTS[difficulty] || 1);
+  const saveScore = async (
+    name,
+    scoreVal,
+    difficulty
+  ) => {
+    const points =
+      scoreVal * (POINTS[difficulty] || 1);
 
     try {
       const playerId = getPlayerId();
+      const nameKey = getNameKey(name);
 
-      const docRef = await addDoc(collection(db, "scores"), {
-        playerId,
-        name,
-        nameKey: getNameKey(name),
-        firstName: firstName.trim(),
-        lastName: lastName.trim(),
-        score: scoreVal,
-        points,
-        difficulty,
+      const nameQuery = query(
+        collection(db, "scores"),
+        where("nameKey", "==", nameKey)
+      );
+
+      const snapshot = await getDocs(nameQuery);
+
+      // ==================== NEW PLAYER ====================
+
+      if (snapshot.empty) {
+        const docRef = await addDoc(
+          collection(db, "scores"),
+          {
+            playerId,
+            name,
+            nameKey,
+
+            firstName: firstName.trim(),
+            lastName: lastName.trim(),
+
+            easyScore:
+              difficulty === "easy"
+                ? scoreVal
+                : null,
+
+            mediumScore:
+              difficulty === "medium"
+                ? scoreVal
+                : null,
+
+            hardScore:
+              difficulty === "hard"
+                ? scoreVal
+                : null,
+
+            easyPoints:
+              difficulty === "easy"
+                ? points
+                : 0,
+
+            mediumPoints:
+              difficulty === "medium"
+                ? points
+                : 0,
+
+            hardPoints:
+              difficulty === "hard"
+                ? points
+                : 0,
+
+            easyPlayed:
+              difficulty === "easy",
+
+            mediumPlayed:
+              difficulty === "medium",
+
+            hardPlayed:
+              difficulty === "hard",
+
+            totalScore: scoreVal,
+
+            totalQuestions:
+              questionBanks.easy.length +
+              questionBanks.medium.length +
+              questionBanks.hard.length,
+
+            totalPoints: points,
+
+            time: new Date().toISOString(),
+          }
+        );
+
+        setMyScoreId(docRef.id);
+
+        return docRef.id;
+      }
+
+      // ==================== EXISTING PLAYER ====================
+
+      const existingDoc = snapshot.docs[0];
+      const existingData = existingDoc.data();
+
+      const updatedEasyScore =
+        difficulty === "easy"
+          ? scoreVal
+          : existingData.easyScore ?? null;
+
+      const updatedMediumScore =
+        difficulty === "medium"
+          ? scoreVal
+          : existingData.mediumScore ?? null;
+
+      const updatedHardScore =
+        difficulty === "hard"
+          ? scoreVal
+          : existingData.hardScore ?? null;
+
+      const updatedEasyPoints =
+        difficulty === "easy"
+          ? points
+          : existingData.easyPoints || 0;
+
+      const updatedMediumPoints =
+        difficulty === "medium"
+          ? points
+          : existingData.mediumPoints || 0;
+
+      const updatedHardPoints =
+        difficulty === "hard"
+          ? points
+          : existingData.hardPoints || 0;
+
+      const updatedTotalScore =
+        (updatedEasyScore || 0) +
+        (updatedMediumScore || 0) +
+        (updatedHardScore || 0);
+
+      const updatedTotalPoints =
+        updatedEasyPoints +
+        updatedMediumPoints +
+        updatedHardPoints;
+
+      await updateDoc(existingDoc.ref, {
+        easyScore: updatedEasyScore,
+        mediumScore: updatedMediumScore,
+        hardScore: updatedHardScore,
+
+        easyPoints: updatedEasyPoints,
+        mediumPoints: updatedMediumPoints,
+        hardPoints: updatedHardPoints,
+
+        easyPlayed:
+          difficulty === "easy"
+            ? true
+            : existingData.easyPlayed || false,
+
+        mediumPlayed:
+          difficulty === "medium"
+            ? true
+            : existingData.mediumPlayed || false,
+
+        hardPlayed:
+          difficulty === "hard"
+            ? true
+            : existingData.hardPlayed || false,
+
+        totalScore: updatedTotalScore,
+
+        totalQuestions:
+          questionBanks.easy.length +
+          questionBanks.medium.length +
+          questionBanks.hard.length,
+
+        totalPoints: updatedTotalPoints,
+
         time: new Date().toISOString(),
       });
 
-      // Remember EXACT leaderboard row.
-      setMyScoreId(docRef.id);
+      setMyScoreId(existingDoc.id);
 
-      return docRef.id;
+      return existingDoc.id;
     } catch (error) {
-      console.error("Error saving score:", error);
+      console.error(
+        "Error saving score:",
+        error
+      );
+
       return null;
     }
   };
@@ -554,7 +694,10 @@ export default function IslamicQuiz() {
   // ==================== START QUIZ ====================
 
   const startQuiz = async () => {
-    if (!firstName.trim() || !lastName.trim()) {
+    if (
+      !firstName.trim() ||
+      !lastName.trim()
+    ) {
       setInfoModal({
         title: "Name Required",
         text: "Please enter both First Name and Last Name.",
@@ -572,63 +715,60 @@ export default function IslamicQuiz() {
       return;
     }
 
-  if (!/^[A-Za-z ]{3,}$/.test(firstName.trim())) {
-  setInfoModal({
-    title: "Invalid First Name",
-    text: "Please enter a valid first name with at least 3 letters.",
-  });
-  return;
-}
+    if (
+      !/^[A-Za-z ]{3,}$/.test(
+        firstName.trim()
+      )
+    ) {
+      setInfoModal({
+        title: "Invalid First Name",
+        text: "Please enter a valid first name with at least 3 letters.",
+      });
 
-if (!/^[A-Za-z ]{3,}$/.test(lastName.trim())) {
-  setInfoModal({
-    title: "Invalid Last Name",
-    text: "Please enter a valid last name with at least 3 letters.",
-  });
-  return;
-}
+      return;
+    }
 
-if (!/^[A-Za-z ]{3,}$/.test(firstName.trim())) {
-  setInfoModal({
-    title: "Invalid First Name",
-    text: "Please enter a valid first name with at least 3 letters.",
-  });
-  return;
-}
+    if (
+      !/^[A-Za-z ]{3,}$/.test(
+        lastName.trim()
+      )
+    ) {
+      setInfoModal({
+        title: "Invalid Last Name",
+        text: "Please enter a valid last name with at least 3 letters.",
+      });
 
-if (!/^[A-Za-z ]{3,}$/.test(lastName.trim())) {
-  setInfoModal({
-    title: "Invalid Last Name",
-    text: "Please enter a valid last name with at least 3 letters.",
-  });
-  return;
-}
+      return;
+    }
 
-const fullName = getFullName();
+    const fullName = getFullName();
 
-const alreadyPlayed = await checkDifficultyAlreadyPlayed(
-  fullName,
-  selectedDifficulty
-);
+    const alreadyPlayed =
+      await checkDifficultyAlreadyPlayed(
+        fullName,
+        selectedDifficulty
+      );
 
-if (alreadyPlayed) {
-  setInfoModal({
-    title: "Already Played",
-    text: `${fullName} has already played ${selectedDifficulty}. You can still play the other difficulty levels.`,
-  });
+    if (alreadyPlayed) {
+      setInfoModal({
+        title: "Already Played",
+        text: `${fullName} has already played ${selectedDifficulty}. You can still play the other difficulty levels.`,
+      });
 
-  return;
-}
+      return;
+    }
 
-setShowCheatModal(true);
-};
+    setShowCheatModal(true);
+  };
 
   // ==================== BEGIN QUIZ ====================
 
   const closeCheatModal = () => {
     setShowCheatModal(false);
 
-    setQuestions(questionBanks[selectedDifficulty]);
+    setQuestions(
+      questionBanks[selectedDifficulty]
+    );
 
     setCurrentQ(0);
     setScore(0);
@@ -652,16 +792,24 @@ setShowCheatModal(true);
 
     setSelectedOption(idx);
 
-    const currentQuestion = questions[currentQ];
+    const currentQuestion =
+      questions[currentQ];
 
-    const newAnswers = [...userAnswers];
+    const newAnswers = [
+      ...userAnswers,
+    ];
 
     newAnswers[currentQ] = idx;
 
     setUserAnswers(newAnswers);
 
-    if (idx === currentQuestion.correct) {
-      setScore((previousScore) => previousScore + 1);
+    if (
+      idx === currentQuestion.correct
+    ) {
+      setScore(
+        (previousScore) =>
+          previousScore + 1
+      );
 
       setFeedback({
         type: "correct",
@@ -675,8 +823,8 @@ setShowCheatModal(true);
     }
 
     setTimeout(() => {
-      nextQuestion();
-    }, 1500);
+      nextQuestion(idx);
+    }, 2000);
   };
 
   // ==================== TIMEOUT ====================
@@ -686,7 +834,11 @@ setShowCheatModal(true);
 
     setAnswered(true);
 
-    const newAnswers = [...userAnswers];
+    clearTimeout(timerRef.current);
+
+    const newAnswers = [
+      ...userAnswers,
+    ];
 
     newAnswers[currentQ] = -1;
 
@@ -698,67 +850,69 @@ setShowCheatModal(true);
     });
 
     setTimeout(() => {
-      nextQuestion();
-    }, 1500);
+      nextQuestion(-1);
+    }, 2000);
   };
 
   // ==================== NEXT QUESTION ====================
 
-  const nextQuestion = () => {
-    if (currentQ + 1 < questions.length) {
-      setCurrentQ((current) => current + 1);
+  const nextQuestion = (
+    latestAnswer = null
+  ) => {
+    if (
+      currentQ + 1 <
+      questions.length
+    ) {
+      setCurrentQ(
+        (current) => current + 1
+      );
 
       setAnswered(false);
       setSelectedOption(null);
       setFeedback(null);
       setTimeLeft(30);
     } else {
-      finishQuiz();
+      finishQuiz(latestAnswer);
     }
   };
 
   // ==================== FINISH ====================
 
-  const finishQuiz = async () => {
+  const finishQuiz = async (
+    latestAnswer = null
+  ) => {
     clearTimeout(timerRef.current);
 
     const fullName = getFullName();
 
-    // Important:
-    // score is the final score because the last answer
-    // updates React state asynchronously.
-    const finalScore =
-      userAnswers.reduce((total, answer, index) => {
-        if (
-          answer !== undefined &&
-          answer !== -1 &&
-          questions[index] &&
-          answer === questions[index].correct
-        ) {
-          return total + 1;
-        }
+    const finalAnswers = [
+      ...userAnswers,
+    ];
 
-        return total;
-      }, 0);
-
-    // If the last answer was correct but userAnswers state
-    // has not updated yet, calculate from selectedOption.
-    let correctedFinalScore = finalScore;
-
-    if (
-      currentQ === questions.length - 1 &&
-      selectedOption !== null &&
-      questions[currentQ] &&
-      selectedOption === questions[currentQ].correct
-    ) {
-      correctedFinalScore = finalScore + 1;
+    if (latestAnswer !== null) {
+      finalAnswers[currentQ] =
+        latestAnswer;
     }
 
-    setScore(correctedFinalScore);
+    const finalScore =
+      questions.reduce(
+        (total, question, index) => {
+          return (
+            total +
+            (finalAnswers[index] ===
+            question.correct
+              ? 1
+              : 0)
+          );
+        },
+        0
+      );
+
+    setScore(finalScore);
 
     await saveScore(
       fullName,
-      correctedFinalScore,
+      finalScore,
       selectedDifficulty
     );
 
@@ -769,37 +923,59 @@ setShowCheatModal(true);
   // ==================== RESULT MESSAGE ====================
 
   const getResultMessage = () => {
-    if (score === 5) {
+    const totalQuestions =
+      questions.length;
+
+    if (
+      score === totalQuestions
+    ) {
       return {
-        message: "SubhanAllah! Perfect Score!",
+        message:
+          "SubhanAllah! Perfect Score!",
         sub: "May Allah increase you in knowledge.",
       };
     }
 
-    if (score >= 4) {
+    if (
+      score >=
+      Math.ceil(
+        totalQuestions * 0.8
+      )
+    ) {
       return {
-        message: "MashaAllah! Excellent!",
+        message:
+          "MashaAllah! Excellent!",
         sub: "You did very well.",
       };
     }
 
-    if (score >= 3) {
+    if (
+      score >=
+      Math.ceil(
+        totalQuestions * 0.6
+      )
+    ) {
       return {
-        message: "Alhamdulillah! Good effort.",
+        message:
+          "Alhamdulillah! Good effort.",
         sub: "Keep seeking knowledge.",
       };
     }
 
     return {
-      message: "Keep going, inshaAllah!",
+      message:
+        "Keep going, inshaAllah!",
       sub: "Every effort is rewarded.",
     };
   };
 
-  const resultMsg = getResultMessage();
+  const resultMsg =
+    getResultMessage();
 
   const pointsEarned =
-    score * (POINTS[selectedDifficulty] || 1);
+    score *
+    (POINTS[selectedDifficulty] ||
+      1);
 
   // ==================== UI ====================
 
@@ -823,7 +999,7 @@ setShowCheatModal(true);
             </h1>
 
             <p className="text-center text-gray-600 text-sm mb-6">
-               Question • 30 seconds each
+              Question • 30 seconds each
             </p>
 
             {/* FIRST NAME */}
@@ -836,7 +1012,11 @@ setShowCheatModal(true);
               <input
                 type="text"
                 value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
+                onChange={(e) =>
+                  setFirstName(
+                    e.target.value
+                  )
+                }
                 placeholder="First name..."
                 maxLength={20}
                 className="w-full px-4 py-3 rounded-xl border-2 border-emerald-100 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-200 outline-none"
@@ -853,7 +1033,11 @@ setShowCheatModal(true);
               <input
                 type="text"
                 value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
+                onChange={(e) =>
+                  setLastName(
+                    e.target.value
+                  )
+                }
                 placeholder="Last name..."
                 maxLength={20}
                 className="w-full px-4 py-3 rounded-xl border-2 border-emerald-100 focus:border-emerald-600 focus:ring-2 focus:ring-emerald-200 outline-none"
@@ -891,19 +1075,26 @@ setShowCheatModal(true);
                 <button
                   key={item.id}
                   onClick={() =>
-                    setSelectedDifficulty(item.id)
+                    setSelectedDifficulty(
+                      item.id
+                    )
                   }
                   className={`flex justify-between items-center px-4 py-3.5 rounded-xl border-2 font-semibold transition ${
-                    selectedDifficulty === item.id
-                      ? item.color === "green"
+                    selectedDifficulty ===
+                    item.id
+                      ? item.color ===
+                        "green"
                         ? "bg-green-50 border-green-600 text-green-700"
-                        : item.color === "yellow"
+                        : item.color ===
+                          "yellow"
                         ? "bg-yellow-50 border-yellow-500 text-yellow-700"
                         : "bg-red-50 border-red-600 text-red-700"
                       : "bg-white border-gray-200 hover:shadow-md"
                   }`}
                 >
-                  <span>{item.label}</span>
+                  <span>
+                    {item.label}
+                  </span>
 
                   <span className="text-xs px-2.5 py-1 rounded-full bg-gray-100 text-gray-600">
                     {item.badge}
@@ -918,7 +1109,9 @@ setShowCheatModal(true);
 
             <button
               onClick={startQuiz}
-              disabled={!selectedDifficulty}
+              disabled={
+                !selectedDifficulty
+              }
               className="w-full py-3.5 rounded-xl bg-gradient-to-r from-emerald-700 to-emerald-600 text-white font-semibold shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed transition"
             >
               Begin with Bismillah →
@@ -926,7 +1119,11 @@ setShowCheatModal(true);
 
             <div className="mt-4 text-center">
               <button
-                onClick={() => setScreen("leaderboard")}
+                onClick={() =>
+                  setScreen(
+                    "leaderboard"
+                  )
+                }
                 className="px-5 py-2.5 rounded-xl border-2 border-emerald-700 text-emerald-700 font-medium hover:bg-emerald-700 hover:text-white transition text-sm"
               >
                 View Live Leaderboard
@@ -937,119 +1134,141 @@ setShowCheatModal(true);
 
         {/* ==================== QUIZ SCREEN ==================== */}
 
-        {screen === "quiz" && questions[currentQ] && (
-          <div className="bg-[#f8f5f0] rounded-3xl p-7 shadow-2xl border-2 border-amber-300/30 relative overflow-hidden">
+        {screen === "quiz" &&
+          questions[currentQ] && (
+            <div className="bg-[#f8f5f0] rounded-3xl p-7 shadow-2xl border-2 border-amber-300/30 relative overflow-hidden">
 
-            <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-amber-400 via-emerald-600 to-amber-400"></div>
+              <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-amber-400 via-emerald-600 to-amber-400"></div>
 
-            <div className="flex justify-between items-center mb-4">
+              <div className="flex justify-between items-center mb-4">
 
-              <div>
-                <span className="font-semibold text-emerald-800 text-sm">
-                  Question {currentQ + 1} of {questions.length}
-                </span>
+                <div>
+                  <span className="font-semibold text-emerald-800 text-sm">
+                    Question{" "}
+                    {currentQ + 1} of{" "}
+                    {questions.length}
+                  </span>
 
-                <span
-                  className={`ml-2 text-xs px-2 py-0.5 rounded-full font-semibold ${
-                    selectedDifficulty === "easy"
-                      ? "bg-green-100 text-green-700"
-                      : selectedDifficulty === "medium"
-                      ? "bg-yellow-100 text-yellow-700"
-                      : "bg-red-100 text-red-700"
+                  <span
+                    className={`ml-2 text-xs px-2 py-0.5 rounded-full font-semibold ${
+                      selectedDifficulty ===
+                      "easy"
+                        ? "bg-green-100 text-green-700"
+                        : selectedDifficulty ===
+                          "medium"
+                        ? "bg-yellow-100 text-yellow-700"
+                        : "bg-red-100 text-red-700"
+                    }`}
+                  >
+                    {selectedDifficulty
+                      ?.charAt(0)
+                      .toUpperCase() +
+                      selectedDifficulty?.slice(
+                        1
+                      )}
+                  </span>
+                </div>
+
+                <div
+                  className={`px-4 py-1.5 rounded-full text-white font-bold text-lg min-w-[64px] text-center ${
+                    timeLeft <= 3
+                      ? "bg-red-600 animate-pulse"
+                      : timeLeft <= 5
+                      ? "bg-orange-500 animate-pulse"
+                      : "bg-emerald-700"
                   }`}
                 >
-                  {selectedDifficulty
-                    ?.charAt(0)
-                    .toUpperCase() +
-                    selectedDifficulty?.slice(1)}
-                </span>
+                  {timeLeft}
+                </div>
               </div>
 
-              <div
-                className={`px-4 py-1.5 rounded-full text-white font-bold text-lg min-w-[64px] text-center ${
-                  timeLeft <= 3
-                    ? "bg-red-600 animate-pulse"
-                    : timeLeft <= 5
-                    ? "bg-orange-500 animate-pulse"
-                    : "bg-emerald-700"
-                }`}
-              >
-                {timeLeft}
+              <div className="h-1.5 bg-emerald-100 rounded-full mb-5 overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-amber-400 to-emerald-600 transition-all duration-300"
+                  style={{
+                    width: `${
+                      ((currentQ + 1) /
+                        questions.length) *
+                      100
+                    }%`,
+                  }}
+                ></div>
               </div>
-            </div>
 
-            <div className="h-1.5 bg-emerald-100 rounded-full mb-5 overflow-hidden">
-              <div
-                className="h-full bg-gradient-to-r from-amber-400 to-emerald-600 transition-all duration-300"
-                style={{
-                  width: `${((currentQ + 1) / 5) * 100}%`,
-                }}
-              ></div>
-            </div>
+              <div className="text-center text-lg font-semibold mb-5 leading-snug">
+                {questions[currentQ].q}
+              </div>
 
-            <div className="text-center text-lg font-semibold mb-5 leading-snug">
-              {questions[currentQ].q}
-            </div>
+              <div className="flex flex-col gap-2.5">
 
-            <div className="flex flex-col gap-2.5">
+                {questions[
+                  currentQ
+                ].options.map(
+                  (opt, idx) => {
+                    let cls =
+                      "px-4 py-3.5 rounded-xl border-2 text-left transition cursor-pointer ";
 
-              {questions[currentQ].options.map(
-                (opt, idx) => {
-
-                  let cls =
-                    "px-4 py-3.5 rounded-xl border-2 text-left transition cursor-pointer ";
-
-                  if (answered) {
-                    cls +=
-                      "opacity-90 cursor-not-allowed ";
-
-                    if (
-                      idx === questions[currentQ].correct
-                    ) {
+                    if (answered) {
                       cls +=
-                        "border-green-600 bg-green-50 text-green-700 font-semibold";
-                    } else if (
-                      idx === selectedOption
-                    ) {
-                      cls +=
-                        "border-red-500 bg-red-50 text-red-600";
+                        "opacity-90 cursor-not-allowed ";
+
+                      if (
+                        idx ===
+                        questions[
+                          currentQ
+                        ].correct
+                      ) {
+                        cls +=
+                          "border-green-600 bg-green-50 text-green-700 font-semibold";
+                      } else if (
+                        idx ===
+                        selectedOption
+                      ) {
+                        cls +=
+                          "border-red-500 bg-red-50 text-red-600";
+                      } else {
+                        cls +=
+                          "border-gray-200 bg-white";
+                      }
                     } else {
                       cls +=
-                        "border-gray-200 bg-white";
+                        selectedOption ===
+                        idx
+                          ? "border-emerald-600 bg-emerald-50"
+                          : "border-gray-200 bg-white hover:border-emerald-500 hover:bg-emerald-50";
                     }
-                  } else {
-                    cls +=
-                      selectedOption === idx
-                        ? "border-emerald-600 bg-emerald-50"
-                        : "border-gray-200 bg-white hover:border-emerald-500 hover:bg-emerald-50";
-                  }
 
-                  return (
-                    <div
-                      key={idx}
-                      className={cls}
-                      onClick={() => selectAnswer(idx)}
-                    >
-                      {opt}
-                    </div>
-                  );
-                }
+                    return (
+                      <div
+                        key={idx}
+                        className={cls}
+                        onClick={() =>
+                          selectAnswer(
+                            idx
+                          )
+                        }
+                      >
+                        {opt}
+                      </div>
+                    );
+                  }
+                )}
+              </div>
+
+              {feedback && (
+                <div
+                  className={`mt-4 p-3 rounded-xl text-center font-semibold ${
+                    feedback.type ===
+                    "correct"
+                      ? "bg-green-50 text-green-700"
+                      : "bg-red-50 text-red-600"
+                  }`}
+                >
+                  {feedback.text}
+                </div>
               )}
             </div>
-
-            {feedback && (
-              <div
-                className={`mt-4 p-3 rounded-xl text-center font-semibold ${
-                  feedback.type === "correct"
-                    ? "bg-green-50 text-green-700"
-                    : "bg-red-50 text-red-600"
-                }`}
-              >
-                {feedback.text}
-              </div>
-            )}
-          </div>
-        )}
+          )}
 
         {/* ==================== RESULT SCREEN ==================== */}
 
@@ -1069,7 +1288,8 @@ setShowCheatModal(true);
               </div>
 
               <div className="text-sm opacity-90">
-                out of 5
+                out of{" "}
+                {questions.length}
               </div>
             </div>
 
@@ -1091,7 +1311,8 @@ setShowCheatModal(true);
 
             {userAnswers.some(
               (ans, i) =>
-                ans !== questions[i]?.correct
+                ans !==
+                questions[i]?.correct
             ) && (
               <div className="mb-5">
 
@@ -1099,38 +1320,49 @@ setShowCheatModal(true);
                   Questions you got wrong
                 </h3>
 
-                {questions.map((q, i) => {
+                {questions.map(
+                  (q, i) => {
+                    if (
+                      userAnswers[i] ===
+                      q.correct
+                    ) {
+                      return null;
+                    }
 
-                  if (
-                    userAnswers[i] === q.correct
-                  ) {
-                    return null;
+                    const yourAns =
+                      userAnswers[i] ===
+                      -1
+                        ? "No answer (Time up)"
+                        : q.options[
+                            userAnswers[i]
+                          ];
+
+                    return (
+                      <div
+                        key={i}
+                        className="bg-white border border-red-200 rounded-xl p-3 mb-2.5 text-sm"
+                      >
+                        <div className="font-semibold mb-1">
+                          {i + 1}. {q.q}
+                        </div>
+
+                        <div className="text-red-600 mb-0.5">
+                          Your answer:{" "}
+                          {yourAns}
+                        </div>
+
+                        <div className="text-green-700 font-medium">
+                          Correct:{" "}
+                          {
+                            q.options[
+                              q.correct
+                            ]
+                          }
+                        </div>
+                      </div>
+                    );
                   }
-
-                  const yourAns =
-                    userAnswers[i] === -1
-                      ? "No answer (Time up)"
-                      : q.options[userAnswers[i]];
-
-                  return (
-                    <div
-                      key={i}
-                      className="bg-white border border-red-200 rounded-xl p-3 mb-2.5 text-sm"
-                    >
-                      <div className="font-semibold mb-1">
-                        {i + 1}. {q.q}
-                      </div>
-
-                      <div className="text-red-600 mb-0.5">
-                        Your answer: {yourAns}
-                      </div>
-
-                      <div className="text-green-700 font-medium">
-                        Correct: {q.options[q.correct]}
-                      </div>
-                    </div>
-                  );
-                })}
+                )}
               </div>
             )}
 
@@ -1143,12 +1375,18 @@ setShowCheatModal(true);
             </p>
 
             <p className="text-center text-gray-500 text-sm mb-5">
-              Made with ❤️ by{" "}
-              <strong>Zakii Shaikh</strong>
+              Made by{" "}
+              <strong>
+                Zakii Shaikh
+              </strong>
             </p>
 
             <button
-              onClick={() => setScreen("leaderboard")}
+              onClick={() =>
+                setScreen(
+                  "leaderboard"
+                )
+              }
               className="w-full py-3.5 rounded-xl bg-gradient-to-r from-emerald-700 to-emerald-600 text-white font-semibold shadow-lg"
             >
               View Live Leaderboard
@@ -1162,10 +1400,6 @@ setShowCheatModal(true);
           <div className="bg-[#f8f5f0] rounded-3xl p-7 shadow-2xl border-2 border-amber-300/30 relative overflow-hidden">
 
             <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-amber-400 via-emerald-600 to-amber-400"></div>
-
-            <div className="text-center font-serif text-xl text-emerald-800 mb-1">
-              لوحة المتصدرين
-            </div>
 
             <h1 className="text-center font-serif text-2xl text-emerald-800 mb-2">
               Live Leaderboard
@@ -1182,99 +1416,118 @@ setShowCheatModal(true);
 
             <ul className="space-y-2 mb-5 max-h-[400px] overflow-y-auto">
 
-              {leaderboard.length === 0 && (
+              {leaderboard.length ===
+                0 && (
                 <p className="text-center text-gray-500 py-6">
                   No scores yet. Be the first!
                 </p>
               )}
 
-              {leaderboard.map((item, i) => {
+              {leaderboard.map(
+                (item, i) => {
 
-                // EXACT match.
-                // This prevents two people with the same
-                // name from both showing YOU.
-                const isYou =
-                  myScoreId &&
-                  item.id === myScoreId;
+                  const isYou =
+                    myScoreId &&
+                    item.id ===
+                      myScoreId;
 
-                return (
-                  <li
-                    key={item.id || i}
-                    ref={
-                      isYou
-                        ? myRowRef
-                        : null
-                    }
-                    className={`flex items-center p-3 rounded-xl border ${
-                      isYou
-                        ? "ring-2 ring-red-500 border-red-400 bg-red-50"
-                        : i === 0
-                        ? "bg-gradient-to-r from-amber-50 to-amber-100 border-amber-300"
-                        : i === 1
-                        ? "bg-gray-100 border-gray-200"
-                        : i === 2
-                        ? "bg-orange-50 border-orange-200"
-                        : "bg-white border-emerald-100"
-                    }`}
-                  >
+                  const playedDifficulties =
+                    [
+                      item.easyPlayed &&
+                        "Easy",
+                      item.mediumPlayed &&
+                        "Medium",
+                      item.hardPlayed &&
+                        "Hard",
+                    ]
+                      .filter(Boolean)
+                      .join(" • ");
 
-                    {/* RANK */}
-
-                    <div
-                      className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold text-white mr-3 ${
-                        i === 0
-                          ? "bg-amber-500 text-gray-900"
+                  return (
+                    <li
+                      key={
+                        item.id || i
+                      }
+                      ref={
+                        isYou
+                          ? myRowRef
+                          : null
+                      }
+                      className={`flex items-center p-3 rounded-xl border ${
+                        isYou
+                          ? "ring-2 ring-red-500 border-red-400 bg-red-50"
+                          : i === 0
+                          ? "bg-gradient-to-r from-amber-50 to-amber-100 border-amber-300"
                           : i === 1
-                          ? "bg-gray-400"
+                          ? "bg-gray-100 border-gray-200"
                           : i === 2
-                          ? "bg-orange-600"
-                          : "bg-emerald-700"
+                          ? "bg-orange-50 border-orange-200"
+                          : "bg-white border-emerald-100"
                       }`}
                     >
-                      {i + 1}
-                    </div>
 
-                    {/* NAME */}
+                      {/* RANK */}
 
-                    <div className="flex-1 min-w-0">
-
-                      <div className="font-medium truncate">
-                        {item.name}
+                      <div
+                        className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold text-white mr-3 ${
+                          i === 0
+                            ? "bg-amber-500 text-gray-900"
+                            : i === 1
+                            ? "bg-gray-400"
+                            : i === 2
+                            ? "bg-orange-600"
+                            : "bg-emerald-700"
+                        }`}
+                      >
+                        {i + 1}
                       </div>
 
-                      <div className="text-xs text-gray-500">
-                        {item.difficulty
-                          ? item.difficulty
-                              .charAt(0)
-                              .toUpperCase() +
-                            item.difficulty.slice(1)
-                          : "-"}{" "}
-                        • {item.score}/5
+                      {/* NAME */}
+
+                      <div className="flex-1 min-w-0">
+
+                        <div className="font-medium truncate">
+                          {item.name}
+                        </div>
+
+                        <div className="text-xs text-gray-500">
+                          {playedDifficulties ||
+                            "-"}
+                          {" • "}
+                          {item.totalPoints ||
+                            0}{" "}
+                          Points
+                        </div>
+
                       </div>
-                    </div>
 
-                    {/* POINTS + YOU */}
+                      {/* POINTS + YOU */}
 
-                    <div className="text-right flex items-center gap-2">
+                      <div className="text-right flex items-center gap-2">
 
-                      {isYou && (
-                        <span className="text-[10px] font-bold text-red-600 border border-red-500 rounded px-1.5 py-0.5">
-                          YOU
-                        </span>
-                      )}
+                        {isYou && (
+                          <span className="text-[10px] font-bold text-red-600 border border-red-500 rounded px-1.5 py-0.5">
+                            YOU
+                          </span>
+                        )}
 
-                      <div className="font-bold text-emerald-700">
-                        {item.points || 0} pts
+                        <div className="font-bold text-emerald-700">
+                          {item.totalPoints ||
+                            0}{" "}
+                          pts
+                        </div>
+
                       </div>
-                    </div>
-
-                  </li>
-                );
-              })}
+                    </li>
+                  );
+                }
+              )}
             </ul>
 
             <button
-              onClick={() => setScreen("start")}
+              onClick={() =>
+                setScreen("start")
+              }
               className="w-full py-3 rounded-xl border-2 border-emerald-700 text-emerald-700 font-medium hover:bg-emerald-700 hover:text-white transition"
             >
               ← Back to Home
@@ -1282,7 +1535,7 @@ setShowCheatModal(true);
           </div>
         )}
 
-        {/* FOOTER */}
+        {/* ==================== FOOTER ==================== */}
 
         {screen === "start" && (
           <div className="text-center mt-6 text-white/70 text-sm">
@@ -1328,7 +1581,9 @@ setShowCheatModal(true);
             </p>
 
             <button
-              onClick={closeCheatModal}
+              onClick={
+                closeCheatModal
+              }
               className="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-700 to-emerald-600 text-white font-semibold"
             >
               I Understand – Start Quiz
@@ -1359,7 +1614,8 @@ setShowCheatModal(true);
               </div>
 
               <div className="text-xs opacity-90">
-                out of 5
+                out of{" "}
+                {questions.length}
               </div>
             </div>
 
@@ -1384,7 +1640,9 @@ setShowCheatModal(true);
 
             <button
               onClick={() =>
-                setShowScoreModal(false)
+                setShowScoreModal(
+                  false
+                )
               }
               className="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-700 to-emerald-600 text-white font-semibold"
             >
@@ -1410,7 +1668,9 @@ setShowCheatModal(true);
             </p>
 
             <button
-              onClick={() => setInfoModal(null)}
+              onClick={() =>
+                setInfoModal(null)
+              }
               className="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-700 to-emerald-600 text-white font-semibold"
             >
               OK
