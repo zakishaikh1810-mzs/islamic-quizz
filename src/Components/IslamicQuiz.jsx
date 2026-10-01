@@ -157,26 +157,39 @@ const questionBanks = {
       ],
       correct: 1,
     },
+    
     {
-      q: "What was the name of Prophet Muhammad's ﷺ father?",
-      options: [
-        "Abu Talib",
-        "Abdullah",
-        "Abdul Muttalib",
-        "Hamzah",
-      ],
-      correct: 1,
-    },
-    {
-      q: "Which was the first major battle between the Muslims and Quraysh?",
-      options: [
-        "Battle of Uhud",
-        "Battle of Khandaq",
-        "Battle of Badr",
-        "Battle of Hunayn",
-      ],
-      correct: 2,
-    },
+  q: "Which companion was known as the 'Dhul-Nurayn'?",
+  options: [
+    "Umar ibn Al-Khattab (RA)",
+    "Uthman ibn Affan (RA)",
+    "Ali ibn Abi Talib (RA)",
+    "Talhah ibn Ubaydillah (RA)",
+  ],
+  correct: 1,
+},
+
+{
+  q: "Which Prophet could understand the language of birds?",
+  options: [
+    "Dawud (AS)",
+    "Sulayman (AS)",
+    "Yusuf (AS)",
+    "Musa (AS)",
+  ],
+  correct: 1,
+},
+
+{
+  q: "Which companion was known as the 'Sword of Allah'?",
+  options: [
+    "Hamzah (RA)",
+    "Khalid ibn Al-Walid (RA)",
+    "Ali ibn Abi Talib (RA)",
+    "Sa'd ibn Abi Waqqas (RA)",
+  ],
+  correct: 1,
+},
     {
       q: "Which companion was given the title Dhun-Nurayn?",
       options: [
@@ -227,16 +240,7 @@ const questionBanks = {
       ],
       correct: 2,
     },
-    {
-      q: "Which Prophet was swallowed by a large fish?",
-      options: [
-        "Yunus (AS)",
-        "Ayyub (AS)",
-        "Zakariyya (AS)",
-        "Yahya (AS)",
-      ],
-      correct: 0,
-    },
+    
     {
       q: "How many Surahs are there in the Quran?",
       options: ["110", "112", "114", "116"],
