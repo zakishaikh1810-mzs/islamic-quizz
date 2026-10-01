@@ -17,56 +17,114 @@ import {
 const questionBanks = {
   easy: [
     {
-      q: "Which Surah is recited in every Rak'ah of Salah?",
-      options: ["Al-Baqarah", "Al-Fatihah", "Al-Ikhlas", "An-Nas"],
-      correct: 1,
-    },
-    {
-      q: "How many obligatory prayers are there in a day?",
-      options: ["3", "4", "5", "6"],
-      correct: 2,
-    },
-    {
-      q: "Which angel brought revelation to Prophet Muhammad ﷺ?",
-      options: ["Mikail (AS)", "Israfil (AS)", "Jibril (AS)", "Malik (AS)"],
-      correct: 2,
-    },
-    {
-      q: "Which city did Prophet Muhammad ﷺ migrate to from Makkah?",
-      options: ["Ta'if", "Madinah", "Jerusalem", "Damascus"],
-      correct: 1,
-    },
-    {
-      q: "Which Surah is known as the 'Mother of the Book'?",
-      options: ["Al-Fatihah", "Al-Baqarah", "Al-Ikhlas", "Yasin"],
-      correct: 0,
-    },
-    {
-      q: "Which prayer is performed just after sunset?",
-      options: ["Fajr", "Dhuhr", "Asr", "Maghrib"],
-      correct: 3,
-    },
-    {
-      q: "Which Eid is celebrated during the month of Dhul-Hijjah?",
-      options: ["Eid al-Fitr", "Eid al-Adha", "Ashura", "Eid Milad"],
-      correct: 1,
-    },
-    {
-      q: "What is the direction faced by Muslims during Salah called?",
-      options: ["Qiblah", "Hijrah", "Mihrab", "Minbar"],
-      correct: 0,
-    },
-    {
-      q: "Which month comes immediately after Ramadan?",
-      options: ["Muharram", "Dhul-Hijjah", "Shawwal", "Rajab"],
-      correct: 2,
-    },
-    {
-      q: "What is the name of the well near the Kaaba?",
-      options: ["Zamzam", "Kawthar", "Salsabil", "Tabuk"],
-      correct: 0,
-    },
+  q: "Which Prophet rebuilt the Ka'bah with his son Isma'il (AS)?",
+  options: [
+    "Ibrahim (AS)",
+    "Nuh (AS)",
+    "Ya'qub (AS)",
+    "Musa (AS)",
   ],
+  correct: 0,
+},
+
+{
+  q: "Which Prophet was imprisoned after refusing the advances of the wife of Al-Aziz?",
+  options: [
+    "Yusuf (AS)",
+    "Musa (AS)",
+    "Yunus (AS)",
+    "Ibrahim (AS)",
+  ],
+  correct: 0,
+},
+
+{
+  q: "Who was the first person to accept Islam among the adult men?",
+  options: [
+    "Umar ibn Al-Khattab (RA)",
+    "Abu Bakr As-Siddiq (RA)",
+    "Uthman ibn Affan (RA)",
+    "Ali ibn Abi Talib (RA)",
+  ],
+  correct: 1,
+},
+
+{
+  q: "Which Prophet was swallowed by the great fish?",
+  options: [
+    "Ayyub (AS)",
+    "Yunus (AS)",
+    "Zakariyya (AS)",
+    "Ilyas (AS)",
+  ],
+  correct: 1,
+},
+
+{
+  q: "Which battle was fought in the second year after the Hijrah?",
+  options: [
+    "Battle of Uhud",
+    "Battle of Badr",
+    "Battle of Khandaq",
+    "Battle of Hunayn",
+  ],
+  correct: 1,
+},
+
+{
+  q: "Which Prophet was known for his patience during severe trials and illness?",
+  options: [
+    "Ayyub (AS)",
+    "Ya'qub (AS)",
+    "Yusuf (AS)",
+    "Ismail (AS)",
+  ],
+  correct: 0,
+},
+{
+  q: "Who was the father of Prophet Muhammad ﷺ?",
+  options: [
+    "Abu Talib",
+    "Abdullah",
+    "Abdul-Muttalib",
+    "Hamzah",
+  ],
+  correct: 1,
+},
+
+{
+  q: "Which Prophet was thrown into the fire by his people?",
+  options: [
+    "Ibrahim (AS)",
+    "Musa (AS)",
+    "Nuh (AS)",
+    "Yusuf (AS)",
+  ],
+  correct: 0,
+},
+
+{
+  q: "In which city was Prophet Muhammad ﷺ born?",
+  options: [
+    "Madinah",
+    "Ta'if",
+    "Makkah",
+    "Jerusalem",
+  ],
+  correct: 2,
+},
+
+{
+  q: "Who was the first Caliph after the death of Prophet Muhammad ﷺ?",
+  options: [
+    "Umar ibn Al-Khattab (RA)",
+    "Ali ibn Abi Talib (RA)",
+    "Uthman ibn Affan (RA)",
+    "Abu Bakr As-Siddiq (RA)",
+  ],
+  correct: 3,
+},
+],
 
   medium: [
     {
@@ -187,147 +245,175 @@ const questionBanks = {
   ],
 
   hard: [
-    {
-      q: "In which year of the Hijrah was the Treaty of Hudaybiyyah signed?",
-      options: ["5 AH", "6 AH", "7 AH", "8 AH"],
-      correct: 1,
-    },
-    {
-      q: "Who was the only woman whose name is mentioned in the Quran?",
-      options: [
-        "Khadijah (RA)",
-        "Aisha (RA)",
-        "Maryam (AS)",
-        "Fatimah (RA)",
-      ],
-      correct: 2,
-    },
-    {
-      q: "Which companion was known as the Sword of Allah?",
-      options: [
-        "Umar ibn Al-Khattab (RA)",
-        "Khalid ibn Al-Walid (RA)",
-        "Hamza ibn Abdul-Muttalib (RA)",
-        "Sa'd ibn Abi Waqqas (RA)",
-      ],
-      correct: 1,
-    },
-    {
-      q: "How many years did Prophet Muhammad ﷺ receive revelation?",
-      options: ["20 years", "23 years", "25 years", "40 years"],
-      correct: 1,
-    },
-    {
-      q: "Which battle is also known as Ghazwatul Ahzab?",
-      options: [
-        "Battle of Badr",
-        "Battle of Uhud",
-        "Battle of Khandaq (Trench)",
-        "Battle of Hunayn",
-      ],
-      correct: 2,
-    },
-    {
-      q: "Which companion was known as the Keeper of the Secrets of the Prophet ﷺ?",
-      options: [
-        "Abu Hurairah (RA)",
-        "Hudhayfah ibn Al-Yaman (RA)",
-        "Anas ibn Malik (RA)",
-        "Abdullah ibn Umar (RA)",
-      ],
-      correct: 1,
-    },
-    {
-      q: "Who accompanied Prophet Muhammad ﷺ during the Hijrah and stayed with him in the Cave of Thawr?",
-      options: [
-        "Umar ibn Al-Khattab (RA)",
-        "Abu Bakr As-Siddiq (RA)",
-        "Ali ibn Abi Talib (RA)",
-        "Uthman ibn Affan (RA)",
-      ],
-      correct: 1,
-    },
-    {
-      q: "Which event happened first?",
-      options: [
-        "Battle of Uhud",
-        "Battle of Badr",
-        "Treaty of Hudaybiyyah",
-        "Conquest of Makkah",
-      ],
-      correct: 1,
-    },
-    {
-      q: "Which companion was sent to Madinah before the Hijrah to teach people about Islam?",
-      options: [
-        "Mus'ab ibn Umayr (RA)",
-        "Mu'adh ibn Jabal (RA)",
-        "Zayd ibn Thabit (RA)",
-        "Abu Musa Al-Ash'ari (RA)",
-      ],
-      correct: 0,
-    },
-    {
-      q: "During the Hijrah, who slept in the Prophet's ﷺ bed to help mislead the Quraysh?",
-      options: [
-        "Ali ibn Abi Talib (RA)",
-        "Abu Bakr As-Siddiq (RA)",
-        "Umar ibn Al-Khattab (RA)",
-        "Zubayr ibn Al-Awwam (RA)",
-      ],
-      correct: 0,
-    },
-    {
-      q: "Which companion was known as Dhul-Nurayn because he married two daughters of the Prophet ﷺ?",
-      options: [
-        "Ali ibn Abi Talib (RA)",
-        "Uthman ibn Affan (RA)",
-        "Abu Bakr As-Siddiq (RA)",
-        "Abdur-Rahman ibn Awf (RA)",
-      ],
-      correct: 1,
-    },
-    {
-      q: "Which companion was given the title Hawariyy, meaning a close supporter of the Prophet ﷺ?",
-      options: [
-        "Zubayr ibn Al-Awwam (RA)",
-        "Talhah ibn Ubaydillah (RA)",
-        "Sa'd ibn Abi Waqqas (RA)",
-        "Abdur-Rahman ibn Awf (RA)",
-      ],
-      correct: 0,
-    },
-    {
-      q: "Which companion was famously known for his great wealth and generosity among the companions?",
-      options: [
-        "Abdur-Rahman ibn Awf (RA)",
-        "Abu Hurairah (RA)",
-        "Bilal ibn Rabah (RA)",
-        "Ammar ibn Yasir (RA)",
-      ],
-      correct: 0,
-    },
-    {
-      q: "Which companion led the Muslim forces at the Battle of Mu'tah after Zayd ibn Harithah and Ja'far ibn Abi Talib were martyred?",
-      options: [
-        "Khalid ibn Al-Walid (RA)",
-        "Abu Ubaidah ibn Al-Jarrah (RA)",
-        "Sa'd ibn Abi Waqqas (RA)",
-        "Talhah ibn Ubaydillah (RA)",
-      ],
-      correct: 0,
-    },
-    {
-      q: "Which companion was sent by the Prophet ﷺ to Yemen to teach Islam and judge between the people?",
-      options: [
-        "Mu'adh ibn Jabal (RA)",
-        "Mus'ab ibn Umayr (RA)",
-        "Abu Musa Al-Ash'ari (RA)",
-        "Zayd ibn Thabit (RA)",
-      ],
-      correct: 0,
-    },
+  {
+    q: "In which year of the Hijrah was the Treaty of Hudaybiyyah signed?",
+    options: ["5 AH", "6 AH", "7 AH", "8 AH"],
+    correct: 1,
+  },
+
+  {
+    q: "Who was the only woman whose name is mentioned in the Quran?",
+    options: [
+      "Khadijah (RA)",
+      "Aisha (RA)",
+      "Maryam (AS)",
+      "Fatimah (RA)",
+    ],
+    correct: 2,
+  },
+
+  {
+    q: "How many years did Prophet Muhammad ﷺ receive revelation?",
+    options: ["20 years", "23 years", "25 years", "40 years"],
+    correct: 1,
+  },
+
+  {
+    q: "Which battle is also known as Ghazwatul Ahzab?",
+    options: [
+      "Battle of Badr",
+      "Battle of Uhud",
+      "Battle of Khandaq (Trench)",
+      "Battle of Hunayn",
+    ],
+    correct: 2,
+  },
+
+  {
+    q: "Which companion was known as the Keeper of the Secrets of the Prophet ﷺ?",
+    options: [
+      "Abu Hurairah (RA)",
+      "Hudhayfah ibn Al-Yaman (RA)",
+      "Anas ibn Malik (RA)",
+      "Abdullah ibn Umar (RA)",
+    ],
+    correct: 1,
+  },
+
+  {
+    q: "Who accompanied Prophet Muhammad ﷺ during the Hijrah and stayed with him in the Cave of Thawr?",
+    options: [
+      "Umar ibn Al-Khattab (RA)",
+      "Abu Bakr As-Siddiq (RA)",
+      "Ali ibn Abi Talib (RA)",
+      "Uthman ibn Affan (RA)",
+    ],
+    correct: 1,
+  },
+
+  {
+    q: "Which companion was sent to Madinah before the Hijrah to teach people about Islam?",
+    options: [
+      "Mus'ab ibn Umayr (RA)",
+      "Mu'adh ibn Jabal (RA)",
+      "Zayd ibn Thabit (RA)",
+      "Abu Musa Al-Ash'ari (RA)",
+    ],
+    correct: 0,
+  },
+
+  {
+    q: "During the Hijrah, who slept in the Prophet's ﷺ bed to help mislead the Quraysh?",
+    options: [
+      "Ali ibn Abi Talib (RA)",
+      "Abu Bakr As-Siddiq (RA)",
+      "Umar ibn Al-Khattab (RA)",
+      "Zubayr ibn Al-Awwam (RA)",
+    ],
+    correct: 0,
+  },
+
+  {
+    q: "Which companion was given the title Hawariyy, meaning a close supporter of the Prophet ﷺ?",
+    options: [
+      "Zubayr ibn Al-Awwam (RA)",
+      "Talhah ibn Ubaydillah (RA)",
+      "Sa'd ibn Abi Waqqas (RA)",
+      "Abdur-Rahman ibn Awf (RA)",
+    ],
+    correct: 0,
+  },
+
+
+{
+  q: "Which Prophet's people were destroyed by a wind lasting seven nights and eight days?",
+  options: [
+    "Salih (AS)",
+    "Hud (AS)",
+    "Lut (AS)",
+    "Nuh (AS)",
   ],
+  correct: 1,
+},
+
+  // ==================== NEW HARD QUESTIONS ====================
+
+  {
+    q: "During the Mi'raj, in which heaven did Prophet Muhammad ﷺ meet Prophet Musa (AS)?",
+    options: [
+      "Second heaven",
+      "Fourth heaven",
+      "Sixth heaven",
+      "Seventh heaven",
+    ],
+    correct: 2,
+  },
+
+  {
+    q: "Which Prophet was given the special blessing that iron was made pliable for him?",
+    options: [
+      "Sulayman (AS)",
+      "Dawud (AS)",
+      "Musa (AS)",
+      "Ibrahim (AS)",
+    ],
+    correct: 1,
+  },
+
+ {
+  q: "Which Prophet was sent to both mankind and jinn?",
+  options: [
+    "Dawud (AS)",
+    "Sulayman (AS)",
+    "Musa (AS)",
+    "Ibrahim (AS)",
+  ],
+  correct: 1,
+},
+
+  {
+    q: "Which Prophet was given the ability to understand the speech of birds and an ant, as mentioned in the Qur'an?",
+    options: [
+      "Dawud (AS)",
+      "Sulayman (AS)",
+      "Nuh (AS)",
+      "Yusuf (AS)",
+    ],
+    correct: 1,
+  },
+
+  {
+    q: "According to the Qur'an, what material did Dhul-Qarnayn use together with iron to construct the barrier against Ya'juj and Ma'juj ?",
+    options: [
+      "Molten copper",
+      "Molten gold",
+      "Silver",
+      "Lead",
+    ],
+    correct: 0,
+  },
+
+  {
+    q: "Which companion was described by the Prophet ﷺ as the most knowledgeable of his Ummah regarding what is lawful and unlawful?",
+    options: [
+      "Zayd ibn Thabit (RA)",
+      "Mu'adh ibn Jabal (RA)",
+      "Ubayy ibn Ka'b (RA)",
+      "Abu Ubaidah ibn Al-Jarrah (RA)",
+    ],
+    correct: 1,
+  },
+],
 };
 
 // ==================== POINTS ====================
@@ -986,7 +1072,7 @@ export default function IslamicQuiz() {
         {/* ==================== START SCREEN ==================== */}
 
         {screen === "start" && (
-          <div className="bg-[#f8f5f0] rounded-3xl p-7 shadow-2xl border-2 border-amber-300/30 relative overflow-hidden">
+          <div className="bg-[#f8f5f0] rounded-3xl p-7 shadow-2xl border-2 border-amber-300/30 relative overflow-hidden quiz-card-animation ">
 
             <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-amber-400 via-emerald-600 to-amber-400"></div>
 
@@ -1112,7 +1198,7 @@ export default function IslamicQuiz() {
               disabled={
                 !selectedDifficulty
               }
-              className="w-full py-3.5 rounded-xl bg-gradient-to-r from-emerald-700 to-emerald-600 text-white font-semibold shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed transition"
+              className="w-full py-3.5 rounded-xl bg-gradient-to-r from-emerald-700 to-emerald-600 text-white font-semibold shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed transition button-animation"
             >
               Begin with Bismillah →
             </button>
@@ -1273,7 +1359,7 @@ export default function IslamicQuiz() {
         {/* ==================== RESULT SCREEN ==================== */}
 
         {screen === "result" && (
-          <div className="bg-[#f8f5f0] rounded-3xl p-7 shadow-2xl border-2 border-amber-300/30 relative overflow-hidden">
+          <div className="bg-[#f8f5f0] rounded-3xl p-7 shadow-2xl border-2 border-amber-300/30 relative overflow-hidden fade-animation">
 
             <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-amber-400 via-emerald-600 to-amber-400"></div>
 
@@ -1397,7 +1483,7 @@ export default function IslamicQuiz() {
         {/* ==================== LEADERBOARD ==================== */}
 
         {screen === "leaderboard" && (
-          <div className="bg-[#f8f5f0] rounded-3xl p-7 shadow-2xl border-2 border-amber-300/30 relative overflow-hidden">
+          <div className="bg-[#f8f5f0] rounded-3xl p-7 shadow-2xl border-2 border-amber-300/30 relative overflow-hidden fade-animation">
 
             <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-amber-400 via-emerald-600 to-amber-400"></div>
 
